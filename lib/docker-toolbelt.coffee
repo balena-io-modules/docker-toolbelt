@@ -55,28 +55,30 @@ Docker::imageRootDir = (image) ->
 
 		imageId = imageInfo.Id
 
-		if semver.gte(dockerVersion, '1.10.0')
+		Promise.try ->
+			if semver.lt(dockerVersion, '1.10.0')
+				return imageId
+
 			[ hashType, hash ] = imageId.split(':')
 
-			fs.readFileAsync(path.join(dkroot, 'image/btrfs/imagedb/content', hashType, hash))
+			fs.readFileAsync(path.join(dkroot, "image/#{dockerInfo.Driver}/imagedb/content", hashType, hash))
 			.then(JSON.parse)
 			.then (metadata) ->
 				layerId = createChainId(metadata.rootfs.diff_ids)
 				[ hashType, hash ] = layerId.split(':')
 
-				cacheIdPath = path.join(dkroot, 'image/btrfs/layerdb', hashType, hash, 'cache-id')
+				cacheIdPath = path.join(dkroot, "image/#{dockerInfo.Driver}/layerdb", hashType, hash, 'cache-id')
 
+				# Resolves with 'rootId'
 				fs.readFileAsync(cacheIdPath, encoding: 'utf8')
-			.then (rootId) ->
-				path.join(dkroot, 'btrfs/subvolumes', rootId)
-		else
+		.then (destId) ->
 			switch dockerInfo.Driver
 				when 'btrfs'
-					path.join(dkroot, 'btrfs/subvolumes', imageId)
+					path.join(dkroot, 'btrfs/subvolumes', destId)
 				when 'overlay'
 					imageInfo.GraphDriver.Data.RootDir
 				when 'vfs'
-					path.join(dkroot, 'vfs/dir', imageId)
+					path.join(dkroot, 'vfs/dir', destId)
 				else
 					throw new Error("Unsupported driver: #{dockerInfo.Driver}/")
 

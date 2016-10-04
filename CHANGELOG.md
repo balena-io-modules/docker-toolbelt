@@ -1,3 +1,5 @@
+# 1.2.1
+
 * Improve the regex used for getRegistryAndName
 
 # 1.2.0

@@ -1,3 +1,5 @@
+* Improve the regex used for getRegistryAndName
+
 # 1.2.0
 
 * Add Docker::getRegistryAndName(image)

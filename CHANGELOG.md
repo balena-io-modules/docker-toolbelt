@@ -1,3 +1,5 @@
+# 1.2.0
+
 * Add Docker::getRegistryAndName(image)
 
 # 1.1.0

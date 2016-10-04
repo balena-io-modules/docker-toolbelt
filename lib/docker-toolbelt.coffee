@@ -144,13 +144,8 @@ Docker::createEmptyImage = (imageConfig) ->
 # Example: registry.resinstaging.io/resin/rpi
 #          { registry: "registry.resinstaging.io", imageName: "resin/rpi" }
 Docker::getRegistryAndName = Promise.method (image) ->
-	match = image.match(/^([^\/:]+(?:\/[^\/:]+)?)(?::(.*))?$/)
-	if match
-		registry = 'docker.io'
-		[ ..., imageName, tagName = 'latest' ] = match
-	else
-		match = image.match(/^(?:([^\/:]+(?::[^\/]+)?)\/)?([^\/:]+(?:\/[^\/:]+)?)(?::(.*))?$/)
-		throw new Error("Could not parse the image: #{image}") if not match?
-		[ ..., registry, imageName, tagName = 'latest' ] = match
+	match = image.match(/^(?:([^\/:.]+\.[^\/:]+(?::[0-9]+)?)\/)?([^\/:]+(?:\/[^\/:]+)?)(?::(.*))?$/)
+	throw new Error("Could not parse the image: #{image}") if not match?
+	[ ..., registry = 'docker.io', imageName, tagName = 'latest' ] = match
 	throw new Error('Invalid image name, expected domain.tld/repo/image format.') if not imageName
 	return { registry, imageName, tagName }

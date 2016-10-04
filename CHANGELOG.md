@@ -1,3 +1,5 @@
+* Add Docker::getRegistryAndName(image)
+
 # 1.1.0
 
 * Support vfs/overlay in Docker::imageRoorDir()

@@ -1,3 +1,7 @@
+# 1.3.0
+
+* Implement imageRootDirMounted and aufsDiffPaths (AUFS support)
+
 # 1.2.1
 
 * Improve the regex used for getRegistryAndName

@@ -1,3 +1,5 @@
+* Implement containerRootDir
+
 # 1.3.0
 
 * Implement imageRootDirMounted and aufsDiffPaths (AUFS support)

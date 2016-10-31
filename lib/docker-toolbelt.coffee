@@ -97,6 +97,39 @@ Docker::imageRootDir = (image) ->
 					else
 						throw new Error("Unsupported driver: #{dockerInfo.Driver}/")
 	)
+
+# Gets a string `container` (id or name) as input and returns a promise that
+# resolves to the absolute path of the root directory for that container
+Docker::containerRootDir = (container, host, port) ->
+	Promise.join(
+		@infoAsync()
+		@versionAsync().get('Version')
+		@getContainer(container).inspectAsync()
+		(dockerInfo, dockerVersion, containerInfo) ->
+			dkroot = dockerInfo.DockerRootDir
+
+			containerId = containerInfo.Id
+
+			Promise.try ->
+				if semver.lt(dockerVersion, '1.10.0')
+					return containerId
+
+				fs.readFileAsync(path.join(dkroot, "image/#{dockerInfo.Driver}/layerdb/mounts", containerId, 'mount-id'))
+
+			.then (destId) ->
+				switch dockerInfo.Driver
+					when 'btrfs'
+						path.join(dkroot, 'btrfs/subvolumes', destId)
+					when 'overlay'
+						containerInfo.GraphDriver.Data.RootDir
+					when 'vfs'
+						path.join(dkroot, 'vfs/dir', destId)
+					when 'aufs'
+						path.join(dkroot, 'aufs/mnt', destId)
+					else
+						throw new Error("Unsupported driver: #{dockerInfo.Driver}/")
+	)
+
 # Same as imageRootDir, but provides the full mounted rootfs for AUFS,
 # and has a disposer to unmount.
 Docker::imageRootDirMounted = (image) ->

@@ -9,10 +9,14 @@ fs = Promise.promisifyAll(require('fs'))
 path = require 'path'
 execAsync = Promise.promisify(require('child_process').exec)
 
-Promise.promisifyAll(Docker.prototype, multiArgs: true)
+Promise.promisifyAll Docker.prototype, {
+  filter: (name) -> name == 'run'
+  multiArgs: true
+}
+
 # Hack dockerode to promisify internal classes' prototypes
-Promise.promisifyAll(Docker({}).getImage().constructor.prototype, multiArgs: true)
-Promise.promisifyAll(Docker({}).getContainer().constructor.prototype, multiArgs: true)
+Promise.promisifyAll(Docker({}).getImage().constructor.prototype)
+Promise.promisifyAll(Docker({}).getContainer().constructor.prototype)
 
 module.exports = Docker
 

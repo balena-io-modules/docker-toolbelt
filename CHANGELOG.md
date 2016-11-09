@@ -1,3 +1,5 @@
+* Added multiArgs argument for promisifyAll when calling Docker.run
+
 # 1.3.0
 
 * Implement imageRootDirMounted and aufsDiffPaths (AUFS support)

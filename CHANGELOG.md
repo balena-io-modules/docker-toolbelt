@@ -1,3 +1,5 @@
+* Fixed promisifying docker.runAsync so it returns all callback results.
+
 # 1.3.0
 
 * Implement imageRootDirMounted and aufsDiffPaths (AUFS support)

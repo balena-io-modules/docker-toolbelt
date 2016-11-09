@@ -1,4 +1,4 @@
-* When promisifying Docker.run, multiple arguments are returned in the callback. This is now supported with passing { multiArgs: true } to the promisifyAll function.
+* Fixed promisifying docker.runAsync so it returns all callback results.
 
 # 1.3.0
 

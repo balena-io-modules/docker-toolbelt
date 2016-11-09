@@ -10,8 +10,8 @@ path = require 'path'
 execAsync = Promise.promisify(require('child_process').exec)
 
 Promise.promisifyAll Docker.prototype, {
-  filter: (name) -> name == 'run'
-  multiArgs: true
+	filter: (name) -> name == 'run'
+	multiArgs: true
 }
 
 # Hack dockerode to promisify internal classes' prototypes

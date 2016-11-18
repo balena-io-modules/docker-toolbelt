@@ -13,6 +13,7 @@ Promise.promisifyAll Docker.prototype, {
 	filter: (name) -> name == 'run'
 	multiArgs: true
 }
+Promise.promisifyAll(Docker.prototype)
 
 # Hack dockerode to promisify internal classes' prototypes
 Promise.promisifyAll(Docker({}).getImage().constructor.prototype)

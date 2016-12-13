@@ -1,5 +1,4 @@
 crypto = require 'crypto'
-
 Promise = require 'bluebird'
 Docker = require 'dockerode'
 semver = require 'semver'
@@ -7,6 +6,7 @@ tar = require 'tar-stream'
 es = require 'event-stream'
 fs = Promise.promisifyAll(require('fs'))
 path = require 'path'
+randomstring = require 'randomstring'
 execAsync = Promise.promisify(require('child_process').exec)
 
 Promise.promisifyAll Docker.prototype, {
@@ -102,6 +102,44 @@ Docker::imageRootDir = (image) ->
 					else
 						throw new Error("Unsupported driver: #{dockerInfo.Driver}/")
 	)
+
+EEXIST = code: 'EEXIST'
+ignore = ->
+MIN_PAGE_SIZE = 4096
+
+aufsMountWithDisposer = (target, layerDiffPaths) ->
+	# We try to create the target directory.
+	# If it exists, it's *probably* from a previous run of this same function,
+	# and the mount will fail if the directory is not empty or something's already mounted there.
+	fs.mkdirAsync(target)
+	.catch code: EEXIST, ignore
+	.then ->
+		options = 'noxino,ro,br='
+		remainingBytes = MIN_PAGE_SIZE - options.length
+		layerDiffPaths = layerDiffPaths.map (path) ->
+			return "#{path}=ro+wh"
+		appendFromIndex = layerDiffPaths.findIndex (path) ->
+			remainingBytes -= path.length + 1
+			# < -1 because if this is the last entry we won't actually add the comma
+			return remainingBytes < -1
+		appendFromIndex = layerDiffPaths.length if appendFromIndex == -1
+		appendLayerPaths = layerDiffPaths[appendFromIndex...]
+		options += layerDiffPaths[...appendFromIndex].join(':')
+
+		execAsync("mount -t aufs -o '#{options}' none #{target}")
+		.then ->
+			Promise.mapSeries appendLayerPaths, (path) ->
+				execAsync("mount -t aufs -o 'remount,append:#{path}' none #{target}")
+	.return(target)
+	.disposer (target) ->
+		execAsync("umount #{target}")
+		.then ->
+			fs.rmdirAsync(target)
+		.catch (err) ->
+			# We don't want to crash the node process if something failed here...
+			console.error('Failed to clean up after mounting aufs', err, err.stack)
+			return
+
 # Same as imageRootDir, but provides the full mounted rootfs for AUFS,
 # and has a disposer to unmount.
 Docker::imageRootDirMounted = (image) ->
@@ -116,20 +154,9 @@ Docker::imageRootDirMounted = (image) ->
 			return @imageRootDir(image) if driver isnt 'aufs'
 			@aufsDiffPaths(image)
 			.then (layerDiffPaths) ->
-				branchesOption = 'br=' + layerDiffPaths.join('=ro:') + '=ro'
-				rootDir = path.join(dkroot, 'aufs/mnt', 'tmp' + imageId.split(':')[1])
-				fs.mkdirAsync(rootDir)
-				.then ->
-					execAsync("mount -t aufs -o 'noxino,ro,#{branchesOption}' none #{rootDir}")
-				.return(rootDir)
-				.disposer (rootDir) ->
-					execAsync("umount #{rootDir}")
-					.then ->
-						fs.rmdirAsync(rootDir)
-					.catch (err) ->
-						# We don't want to crash the node process if something failed here...
-						console.error('Failed to clean up after imageRootDirMounted', err, err.stack)
-						return
+				# We add a random string to the path to avoid conflicts between several calls to this function
+				rootDir = path.join(dkroot, 'aufs/mnt', "tmp-#{imageId.split(':')[1]}-#{randomstring.generate(8)}")
+				return aufsMountWithDisposer(rootDir, layerDiffPaths)
 	)
 
 # Only for AUFS: get the diff paths for each layer in the image

@@ -82,7 +82,7 @@ Docker::imageRootDir = (image) ->
 			imageId = imageInfo.Id
 
 			Promise.try ->
-				if semver.lt(dockerVersion, '1.10.0')
+				if semver.lt(dockerVersion, '1.10.0', true)
 					return imageId
 
 				getDiffIds(dkroot, dockerInfo.Driver, imageId)
@@ -173,7 +173,7 @@ Docker::aufsDiffPaths = (image) ->
 			imageId = imageInfo.Id
 			getDiffIds(dkroot, driver, imageId)
 			.then (diffIds) ->
-				return diffIds if semver.lt(dockerVersion, '1.10.0')
+				return diffIds if semver.lt(dockerVersion, '1.10.0', true)
 				Promise.map getAllChainIds(diffIds), (layerId) ->
 					getCacheId(dkroot, driver, layerId)
 			.map (layerId) ->

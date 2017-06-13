@@ -112,7 +112,7 @@ aufsMountWithDisposer = (target, layerDiffPaths) ->
 	# If it exists, it's *probably* from a previous run of this same function,
 	# and the mount will fail if the directory is not empty or something's already mounted there.
 	fs.mkdirAsync(target)
-	.catch code: EEXIST, ignore
+	.catch EEXIST, ignore
 	.then ->
 		options = 'noxino,ro,br='
 		remainingBytes = MIN_PAGE_SIZE - options.length

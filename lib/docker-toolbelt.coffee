@@ -132,7 +132,7 @@ overlay2MountWithDisposer = (fsRoot, target, lowers, diffDir, workDir) ->
 		# relative links make the mount data much smaller.
 		if options.length > MIN_PAGE_SIZE
 			mountOpts.cwd = fsRoot
-			makeRelative = pathPrefixRemover(fsRoot + '/')
+			makeRelative = pathPrefixRemover(path.join(fsRoot, path.sep))
 			options = [
 				"lowerdir=#{lowers.split(':').map(makeRelative).join(':')}"
 				"upperdir=#{makeRelative(diffDir)}"
@@ -216,7 +216,7 @@ Docker::diffPaths = (image) ->
 		@getImage(image).inspectAsync()
 		(dockerInfo, dockerVersion, imageInfo) ->
 			driver = dockerInfo.Driver
-			if not driver in [ 'aufs', 'overlay2' ]
+			if driver not in [ 'aufs', 'overlay2' ]
 				throw new Error('diffPaths can only be used on aufs and overlay2')
 			dkroot = dockerInfo.DockerRootDir
 			imageId = imageInfo.Id

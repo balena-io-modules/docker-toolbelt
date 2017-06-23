@@ -66,6 +66,9 @@ getCacheId = Promise.method (dkroot, driver, layerId) ->
 	# Resolves with 'rootId'
 	fs.readFileAsync(cacheIdPath, encoding: 'utf8')
 
+getRandomFileName = (imageId) ->
+	"tmp-#{imageId.split(':')[1]}-#{randomstring.generate(8)}"
+
 # Gets an string `image` as input and returns a promise that
 # resolves to the absolute path of the root directory for that image
 #
@@ -95,6 +98,8 @@ Docker::imageRootDir = (image) ->
 						path.join(dkroot, 'btrfs/subvolumes', destId)
 					when 'overlay'
 						imageInfo.GraphDriver.Data.RootDir
+					when 'overlay2'
+						imageInfo.GraphDriver.Data.UpperDir
 					when 'vfs'
 						path.join(dkroot, 'vfs/dir', destId)
 					when 'aufs'
@@ -107,12 +112,49 @@ EEXIST = code: 'EEXIST'
 ignore = ->
 MIN_PAGE_SIZE = 4096
 
+pathPrefixRemover = (prefix) ->
+	(path) ->
+		slice = path.substr(prefix.length)
+		# return original if path doesn't start with given prefix
+		return if "#{prefix}#{slice}" == path then slice else path
+
+overlay2MountWithDisposer = (fsRoot, target, lowers, diffDir, workDir) ->
+	# If no lower, just return diff directory
+	return Promise.resolve(diffDir) if !lowers
+
+	fs.mkdirAsync(target)
+	.catch EEXIST, ignore
+	.then ->
+		options = "lowerdir=#{lowers},upperdir=#{diffDir},workdir=#{workDir}"
+		mountOpts = {}
+		# Use relative paths when the mount data has exceeded the page size.
+		# The mount syscall fails if the mount data cannot fit within a page and
+		# relative links make the mount data much smaller.
+		if options.length > MIN_PAGE_SIZE
+			mountOpts.cwd = fsRoot
+			makeRelative = pathPrefixRemover(path.join(fsRoot, path.sep))
+			options = [
+				"lowerdir=#{lowers.split(':').map(makeRelative).join(':')}"
+				"upperdir=#{makeRelative(diffDir)}"
+				"workdir=#{makeRelative(workDir)}"
+			].join(',')
+		execAsync("mount -t overlay -o '#{options}' none #{target}", mountOpts)
+	.return(target)
+	.disposer (target) ->
+		execAsync("umount #{target}")
+		.then ->
+			fs.rmdirAsync(target)
+		.catch (err) ->
+			# We don't want to crash the node process if something failed here...
+			console.error('Failed to clean up after mounting overlay2', err, err.stack)
+			return
+
 aufsMountWithDisposer = (target, layerDiffPaths) ->
 	# We try to create the target directory.
 	# If it exists, it's *probably* from a previous run of this same function,
 	# and the mount will fail if the directory is not empty or something's already mounted there.
 	fs.mkdirAsync(target)
-	.catch code: EEXIST, ignore
+	.catch EEXIST, ignore
 	.then ->
 		options = 'noxino,ro,br='
 		remainingBytes = MIN_PAGE_SIZE - options.length
@@ -140,7 +182,7 @@ aufsMountWithDisposer = (target, layerDiffPaths) ->
 			console.error('Failed to clean up after mounting aufs', err, err.stack)
 			return
 
-# Same as imageRootDir, but provides the full mounted rootfs for AUFS,
+# Same as imageRootDir, but provides the full mounted rootfs for AUFS and overlay2,
 # and has a disposer to unmount.
 Docker::imageRootDirMounted = (image) ->
 	Promise.join(
@@ -151,24 +193,31 @@ Docker::imageRootDirMounted = (image) ->
 			driver = dockerInfo.Driver
 			dkroot = dockerInfo.DockerRootDir
 			imageId = imageInfo.Id
-			return @imageRootDir(image) if driver isnt 'aufs'
-			@aufsDiffPaths(image)
-			.then (layerDiffPaths) ->
-				# We add a random string to the path to avoid conflicts between several calls to this function
-				rootDir = path.join(dkroot, 'aufs/mnt', "tmp-#{imageId.split(':')[1]}-#{randomstring.generate(8)}")
-				return aufsMountWithDisposer(rootDir, layerDiffPaths)
+			# We add a random string to the path to avoid conflicts between several calls to this function
+			if driver is 'aufs'
+				@diffPaths(image).then (layerDiffPaths) ->
+					mountDir = path.join(dkroot, 'aufs/mnt', getRandomFileName(imageId))
+					aufsMountWithDisposer(mountDir, layerDiffPaths)
+			else if driver is 'overlay2'
+				rootDir = path.join(dkroot, 'overlay2')
+				mountDir = path.join(rootDir, getRandomFileName(imageId))
+				{ LowerDir, UpperDir, MergedDir, WorkDir } = imageInfo.GraphDriver.Data
+				overlay2MountWithDisposer(rootDir, mountDir, LowerDir, UpperDir, WorkDir)
+			else
+				@imageRootDir(image)
 	)
 
-# Only for AUFS: get the diff paths for each layer in the image
+# Only for aufs and overlay2: get the diff paths for each layer in the image.
 # Ordered from latest to parent.
-Docker::aufsDiffPaths = (image) ->
+Docker::diffPaths = (image) ->
 	Promise.join(
 		@infoAsync()
 		@versionAsync().get('Version')
 		@getImage(image).inspectAsync()
 		(dockerInfo, dockerVersion, imageInfo) ->
 			driver = dockerInfo.Driver
-			throw new Error('aufsDiffPaths can only be used on aufs') if driver isnt 'aufs'
+			if driver not in [ 'aufs', 'overlay2' ]
+				throw new Error('diffPaths can only be used on aufs and overlay2')
 			dkroot = dockerInfo.DockerRootDir
 			imageId = imageInfo.Id
 			getDiffIds(dkroot, driver, imageId)
@@ -176,10 +225,17 @@ Docker::aufsDiffPaths = (image) ->
 				return diffIds if semver.lt(dockerVersion, '1.10.0', true)
 				Promise.map getAllChainIds(diffIds), (layerId) ->
 					getCacheId(dkroot, driver, layerId)
-			.map (layerId) ->
-				path.join(dkroot, 'aufs/diff', layerId)
 			.call('reverse')
+			.map (layerId) ->
+				switch driver
+					when 'aufs'
+						path.join(dkroot, 'aufs/diff', layerId)
+					when 'overlay2'
+						path.join(dkroot, 'overlay2', layerId, 'diff')
 	)
+
+# Deprecated
+Docker::aufsDiffPaths = Docker::diffPaths
 
 # Given an image configuration it constructs a valid tar archive in the same
 # way a `docker save` would have done that contains an empty filesystem image

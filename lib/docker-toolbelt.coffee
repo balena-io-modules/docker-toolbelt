@@ -315,3 +315,6 @@ Docker::compileRegistryAndName = Promise.method ({ registry, imageName, tagName 
 	tagName = 'latest' if !tagName? or tagName is ''
 	return "#{registry}#{imageName}:#{tagName}"
 
+# Normalise an image name to always have a tag, with :latest being the default
+Docker::normaliseImageName = Promise.method (image) ->
+	@getRegistryAndName(image).then(@compileRegistryAndName)

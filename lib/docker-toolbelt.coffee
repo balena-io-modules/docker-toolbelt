@@ -301,6 +301,20 @@ Docker::createEmptyImage = (imageConfig) ->
 Docker::getRegistryAndName = Promise.method (image) ->
 	match = image.match(/^(?:([^\/:.]+\.[^\/:]+(?::[0-9]+)?)\/)?([^\/:]+(?:\/[^\/:]+)?)(?::(.*))?$/)
 	throw new Error("Could not parse the image: #{image}") if not match?
-	[ ..., registry = 'docker.io', imageName, tagName = 'latest' ] = match
+	[ ..., registry, imageName, tagName = 'latest' ] = match
 	throw new Error('Invalid image name, expected domain.tld/repo/image format.') if not imageName
 	return { registry, imageName, tagName }
+
+# Given an object representing a docker image, in the same format as given
+# by getRegistryAndName, compile it back into a docker image string, which
+# can be used in Docker command etc
+# Example: { registry: "registry.resinstaging.io", imageName: "resin/rpi", tagName: "1234"}
+#		=> registry.resinstaging.io/resin/rpi:1234
+Docker::compileRegistryAndName = Promise.method ({ registry, imageName, tagName }) ->
+	registry += '/' if registry? and registry isnt ''
+	tagName = 'latest' if !tagName? or tagName is ''
+	return "#{registry}#{imageName}:#{tagName}"
+
+# Normalise an image name to always have a tag, with :latest being the default
+Docker::normaliseImageName = Promise.method (image) ->
+	@getRegistryAndName(image).then(@compileRegistryAndName)

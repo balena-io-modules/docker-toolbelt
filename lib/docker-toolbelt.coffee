@@ -310,9 +310,11 @@ Docker::getRegistryAndName = Promise.method (image) ->
 # can be used in Docker command etc
 # Example: { registry: "registry.resinstaging.io", imageName: "resin/rpi", tagName: "1234"}
 #		=> registry.resinstaging.io/resin/rpi:1234
-Docker::compileRegistryAndName = Promise.method ({ registry, imageName, tagName }) ->
-	registry += '/' if registry? and registry isnt ''
+Docker::compileRegistryAndName = Promise.method ({ registry = '', imageName, tagName }) ->
+	registry += '/' if registry isnt ''
+
 	tagName = 'latest' if !tagName? or tagName is ''
+
 	return "#{registry}#{imageName}:#{tagName}"
 
 # Normalise an image name to always have a tag, with :latest being the default

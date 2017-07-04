@@ -9,17 +9,10 @@ path = require 'path'
 randomstring = require 'randomstring'
 execAsync = Promise.promisify(require('child_process').exec)
 
-Promise.promisifyAll Docker.prototype, {
-	filter: (name) -> name == 'run'
-	multiArgs: true
-}
-Promise.promisifyAll(Docker.prototype)
-
-# Hack dockerode to promisify internal classes' prototypes
-Promise.promisifyAll(Docker({}).getImage().constructor.prototype)
-Promise.promisifyAll(Docker({}).getContainer().constructor.prototype)
-
-module.exports = Docker
+module.exports = class DockerToolbelt extends Docker
+	constructor: (opts) ->
+		opts.Promise = Promise
+		super(opts)
 
 sha256sum = (data) ->
 	hash = crypto.createHash('sha256')
@@ -74,11 +67,11 @@ getRandomFileName = (imageId) ->
 #
 # Note: in aufs, the path corresponds to the directory for only
 # the specific layer's fs.
-Docker::imageRootDir = (image) ->
+DockerToolbelt::imageRootDir = (image) ->
 	Promise.join(
-		@infoAsync()
-		@versionAsync().get('Version')
-		@getImage(image).inspectAsync()
+		@info()
+		@version().get('Version')
+		@getImage(image).inspect()
 		(dockerInfo, dockerVersion, imageInfo) ->
 			dkroot = dockerInfo.DockerRootDir
 
@@ -184,11 +177,11 @@ aufsMountWithDisposer = (target, layerDiffPaths) ->
 
 # Same as imageRootDir, but provides the full mounted rootfs for AUFS and overlay2,
 # and has a disposer to unmount.
-Docker::imageRootDirMounted = (image) ->
+DockerToolbelt::imageRootDirMounted = (image) ->
 	Promise.join(
-		@infoAsync()
-		@versionAsync().get('Version')
-		@getImage(image).inspectAsync()
+		@info()
+		@version().get('Version')
+		@getImage(image).inspect()
 		(dockerInfo, dockerVersion, imageInfo) =>
 			driver = dockerInfo.Driver
 			dkroot = dockerInfo.DockerRootDir
@@ -209,11 +202,11 @@ Docker::imageRootDirMounted = (image) ->
 
 # Only for aufs and overlay2: get the diff paths for each layer in the image.
 # Ordered from latest to parent.
-Docker::diffPaths = (image) ->
+DockerToolbelt::diffPaths = (image) ->
 	Promise.join(
-		@infoAsync()
-		@versionAsync().get('Version')
-		@getImage(image).inspectAsync()
+		@info()
+		@version().get('Version')
+		@getImage(image).inspect()
 		(dockerInfo, dockerVersion, imageInfo) ->
 			driver = dockerInfo.Driver
 			if driver not in [ 'aufs', 'overlay2' ]
@@ -235,7 +228,7 @@ Docker::diffPaths = (image) ->
 	)
 
 # Deprecated
-Docker::aufsDiffPaths = Docker::diffPaths
+DockerToolbelt::aufsDiffPaths = DockerToolbelt::diffPaths
 
 # Given an image configuration it constructs a valid tar archive in the same
 # way a `docker save` would have done that contains an empty filesystem image
@@ -245,7 +238,7 @@ Docker::aufsDiffPaths = Docker::diffPaths
 # compute the correct digests and properly load it in the content store
 #
 # It returns a promise that resolves to the new image id
-Docker::createEmptyImage = (imageConfig) ->
+DockerToolbelt::createEmptyImage = (imageConfig) ->
 	manifest = [
 		{
 			Config: 'config.json'
@@ -289,7 +282,7 @@ Docker::createEmptyImage = (imageConfig) ->
 
 		image.finalize()
 
-		@loadImageAsync(image)
+		@loadImage(image)
 		.then (stream) ->
 			Promise.fromCallback (callback) ->
 				stream.pipe(es.wait(callback))
@@ -298,7 +291,7 @@ Docker::createEmptyImage = (imageConfig) ->
 # Separate string containing registry and image name into its parts.
 # Example: registry.resinstaging.io/resin/rpi
 #          { registry: "registry.resinstaging.io", imageName: "resin/rpi" }
-Docker::getRegistryAndName = Promise.method (image) ->
+DockerToolbelt::getRegistryAndName = Promise.method (image) ->
 	match = image.match(/^(?:([^\/:.]+\.[^\/:]+(?::[0-9]+)?)\/)?([^\/:]+(?:\/[^\/:]+)?)(?::(.*))?$/)
 	throw new Error("Could not parse the image: #{image}") if not match?
 	[ ..., registry, imageName, tagName = 'latest' ] = match
@@ -310,7 +303,7 @@ Docker::getRegistryAndName = Promise.method (image) ->
 # can be used in Docker command etc
 # Example: { registry: "registry.resinstaging.io", imageName: "resin/rpi", tagName: "1234"}
 #		=> registry.resinstaging.io/resin/rpi:1234
-Docker::compileRegistryAndName = Promise.method ({ registry = '', imageName, tagName }) ->
+DockerToolbelt::compileRegistryAndName = Promise.method ({ registry = '', imageName, tagName }) ->
 	registry += '/' if registry isnt ''
 
 	tagName = 'latest' if !tagName? or tagName is ''
@@ -318,5 +311,5 @@ Docker::compileRegistryAndName = Promise.method ({ registry = '', imageName, tag
 	return "#{registry}#{imageName}:#{tagName}"
 
 # Normalise an image name to always have a tag, with :latest being the default
-Docker::normaliseImageName = Promise.method (image) ->
+DockerToolbelt::normaliseImageName = Promise.method (image) ->
 	@getRegistryAndName(image).then(@compileRegistryAndName)

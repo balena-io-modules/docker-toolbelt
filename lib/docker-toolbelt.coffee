@@ -10,7 +10,7 @@ randomstring = require 'randomstring'
 execAsync = Promise.promisify(require('child_process').exec)
 
 module.exports = class DockerToolbelt extends Docker
-	constructor: (opts) ->
+	constructor: (opts = {}) ->
 		opts.Promise = Promise
 		super(opts)
 

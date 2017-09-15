@@ -1,7 +1,7 @@
 crypto = require 'crypto'
 Promise = require 'bluebird'
 Docker = require 'dockerode'
-semver = require 'semver'
+semver = require 'resin-semver'
 tar = require 'tar-stream'
 es = require 'event-stream'
 fs = Promise.promisifyAll(require('fs'))
@@ -62,6 +62,13 @@ getCacheId = Promise.method (dkroot, driver, layerId) ->
 getRandomFileName = (imageId) ->
 	"tmp-#{imageId.split(':')[1]}-#{randomstring.generate(8)}"
 
+# Check if the docker version is a release after 1.10.0, or if its one of the fun
+# new non-semver versions, which we incidentally know all appeared after 1.10.0
+# Docker version 1.10.0 changes the way images are stored on disk and referenced
+# If the docker version supports the new "content-addressable" layer format, this function returns true
+usesContentAddressableFormat = (version) ->
+	return !(semver.valid(version) && semver.lt(version, '1.10.0'))
+
 # Gets an string `image` as input and returns a promise that
 # resolves to the absolute path of the root directory for that image
 #
@@ -78,7 +85,7 @@ DockerToolbelt::imageRootDir = (image) ->
 			imageId = imageInfo.Id
 
 			Promise.try ->
-				if semver.lt(dockerVersion, '1.10.0', true)
+				if not usesContentAddressableFormat(dockerVersion)
 					return imageId
 
 				getDiffIds(dkroot, dockerInfo.Driver, imageId)
@@ -215,7 +222,7 @@ DockerToolbelt::diffPaths = (image) ->
 			imageId = imageInfo.Id
 			getDiffIds(dkroot, driver, imageId)
 			.then (diffIds) ->
-				return diffIds if semver.lt(dockerVersion, '1.10.0', true)
+				return diffIds if not usesContentAddressableFormat(dockerVersion)
 				Promise.map getAllChainIds(diffIds), (layerId) ->
 					getCacheId(dkroot, driver, layerId)
 			.call('reverse')

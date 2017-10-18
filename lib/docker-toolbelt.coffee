@@ -201,7 +201,7 @@ DockerToolbelt::imageRootDirMounted = (image) ->
 			else if driver is 'overlay2'
 				rootDir = path.join(dkroot, 'overlay2')
 				mountDir = path.join(rootDir, getRandomFileName(imageId))
-				{ LowerDir, UpperDir, MergedDir, WorkDir } = imageInfo.GraphDriver.Data
+				{ LowerDir, UpperDir, WorkDir } = imageInfo.GraphDriver.Data
 				overlay2MountWithDisposer(rootDir, mountDir, LowerDir, UpperDir, WorkDir)
 			else
 				@imageRootDir(image)

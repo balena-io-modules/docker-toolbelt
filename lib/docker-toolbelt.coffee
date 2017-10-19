@@ -126,19 +126,26 @@ overlay2MountWithDisposer = (fsRoot, target, lowers, diffDir, workDir) ->
 	.catch EEXIST, ignore
 	.then ->
 		options = "lowerdir=#{lowers},upperdir=#{diffDir},workdir=#{workDir}"
-		mountOpts = {}
+		if options.length < MIN_PAGE_SIZE
+			return [ undefined, lowers, diffDir, workDir ]
 		# Use relative paths when the mount data has exceeded the page size.
 		# The mount syscall fails if the mount data cannot fit within a page and
 		# relative links make the mount data much smaller.
-		if options.length > MIN_PAGE_SIZE
-			mountOpts.cwd = fsRoot
-			makeRelative = pathPrefixRemover(path.join(fsRoot, path.sep))
-			options = [
-				"lowerdir=#{lowers.split(':').map(makeRelative).join(':')}"
-				"upperdir=#{makeRelative(diffDir)}"
-				"workdir=#{makeRelative(workDir)}"
-			].join(',')
-		execAsync("mount -t overlay -o '#{options}' none #{target}", mountOpts)
+		makeRelative = pathPrefixRemover(path.join(fsRoot, path.sep))
+		Promise.map lowers.split(':'), (lower) ->
+			# Read the layer's "link" file which contains its shortened layer identifier.
+			# Then replace the layer's lowerdir entry with its shortened alias.
+			# See: https://docs.docker.com/engine/userguide/storagedriver/overlayfs-driver/#image-and-container-layers-on-disk
+			layerId = makeRelative(lower).replace(/\/diff$/, '')
+			linkPath = path.join(fsRoot, layerId, 'link')
+			fs.readFileAsync(linkPath)
+			.then (link) ->
+				path.join('l', link.toString())
+		.then (lowers) ->
+			[ fsRoot, lowers.join(':'), makeRelative(diffDir), makeRelative(workDir) ]
+	.then ([ fsRoot, lowers, diffDir, workDir ]) ->
+		options = "lowerdir=#{lowers},upperdir=#{diffDir},workdir=#{workDir}"
+		execAsync("mount -t overlay overlay -o '#{options}' #{target}", cwd: fsRoot)
 	.return(target)
 	.disposer (target) ->
 		execAsync("umount #{target}")
@@ -201,7 +208,7 @@ DockerToolbelt::imageRootDirMounted = (image) ->
 			else if driver is 'overlay2'
 				rootDir = path.join(dkroot, 'overlay2')
 				mountDir = path.join(rootDir, getRandomFileName(imageId))
-				{ LowerDir, UpperDir, MergedDir, WorkDir } = imageInfo.GraphDriver.Data
+				{ LowerDir, UpperDir, WorkDir } = imageInfo.GraphDriver.Data
 				overlay2MountWithDisposer(rootDir, mountDir, LowerDir, UpperDir, WorkDir)
 			else
 				@imageRootDir(image)

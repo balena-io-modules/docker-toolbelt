@@ -302,6 +302,36 @@ DockerToolbelt::createEmptyImage = (imageConfig) ->
 				stream.pipe(es.wait(callback))
 		.return(imageId)
 
+# Given a source and destination image, generates a delta and returns a promise
+# that resolves with the ID of the generated image. `onProgress` is an optional
+# callback that receives a single argument for the progress event that can used
+# to follow progress.
+#
+# Deltas are currently only available with Balena, but this method makes no
+# effort to determine whether that's the case.
+#
+# The name of this method is intentionally unconventional for docker-toolbelt,
+# anticipating the appearance of a similar method *in* dockerode in the future.
+DockerToolbelt::createDeltaAsync = (src, dest, onProgress) ->
+	optsf = {
+		path: '/images/delta?',
+		method: 'POST',
+		options: { src, dest },
+		isStream: true,
+		statusCodes:
+			200: true,
+			404: 'no such image',
+			500: 'server error',
+	}
+	return Promise.fromCallback (cb) =>
+		@modem.dial(optsf, cb)
+	.then (stream) =>
+		Promise.fromCallback (cb) =>
+			@modem.followProgress stream, cb, (e) ->
+				onProgress?(e)
+				if (match = /^Created delta: (sha256:\w+)$/.exec(e.status))
+					cb(null, match[1])
+
 # Separate string containing registry and image name into its parts.
 # Example: registry.resinstaging.io/resin/rpi
 #          { registry: "registry.resinstaging.io", imageName: "resin/rpi" }

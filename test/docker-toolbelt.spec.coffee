@@ -44,3 +44,36 @@ describe 'DockerToolbelt', ->
 		expect(d2.listImagesAsync).to.be.undefined
 		expect(d2.getImage('foo').inspectAsync).to.be.undefined
 		expect(d2.diffPaths).to.be.undefined
+
+	it 'splits an image name into its components with getRegistryAndName', ->
+		@d.getRegistryAndName('someregistry.com/some/repo:sometag')
+		.then (components) =>
+			expect(components).to.deep.equal({
+				registry: 'someregistry.com'
+				imageName: 'some/repo'
+				tagName: 'sometag'
+				digest: undefined
+			})
+
+	it 'splits an image name into its components defaulting tag to latest with getRegistryAndName', ->
+		@d.getRegistryAndName('someregistry.com/some/repo')
+		.then (components) =>
+			expect(components).to.deep.equal({
+				registry: 'someregistry.com'
+				imageName: 'some/repo'
+				tagName: 'latest'
+				digest: undefined
+			})
+
+	it 'matches an image name with digest with getRegistryAndName', ->
+		@d.getRegistryAndName('someregistry.com/some/repo@sha256:0123456789abcdef0123456789abcdef')
+		.then (components) =>
+			expect(components).to.deep.equal({
+				registry: 'someregistry.com'
+				imageName: 'some/repo'
+				tagName: undefined
+				digest: 'sha256:0123456789abcdef0123456789abcdef'
+			})
+
+	it 'throws when running getRegistryAndName if the image name has an invalid digest', ->
+		expect(@d.getRegistryAndName('someregistry.com/some/repo@sha256:0123456789abcdef0123456789abcdeg')).to.be.rejected

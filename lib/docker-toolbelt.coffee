@@ -19,7 +19,7 @@ sha256sum = (data) ->
 	hash.update(data)
 	return hash.digest('hex')
 
-digest = (data) ->
+getDigest = (data) ->
 	return 'sha256:' + sha256sum(data)
 
 # Function adapted to JavaScript from
@@ -43,7 +43,7 @@ createChainIdFromParent = (parent, dgsts) ->
 		return createChainIdFromParent(dgsts[0], dgsts[1..])
 
 	# H = "H(n-1) SHA256(n)"
-	dgst = digest(parent + ' ' + dgsts[0])
+	dgst = getDigest(parent + ' ' + dgsts[0])
 
 	return createChainIdFromParent(dgst, dgsts[1..])
 
@@ -278,7 +278,7 @@ DockerToolbelt::createEmptyImage = (imageConfig) ->
 			created: now
 			rootfs:
 				type: 'layers'
-				diff_ids: [ digest(buf) ]
+				diff_ids: [ getDigest(buf) ]
 
 		imageId = sha256sum(JSON.stringify(config))
 

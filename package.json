@@ -5,7 +5,9 @@
   "main": "lib/docker-toolbelt.js",
   "types": "lib/docker-toolbelt.d.ts",
   "scripts": {
-    "prepublish": "npm run test && coffee -c lib",
+    "prepublish": "require-npm4-to-publish",
+    "prepublishOnly": "npm run build && npm run test",
+    "build": "coffee -c lib",
     "lint": "resin-lint lib",
     "test": "npm run lint && mocha --compilers coffee:coffee-script/register",
     "versionist": "versionist"
@@ -34,6 +36,7 @@
     "coffee-script": "^1.10.0",
     "mocha": "^3.4.2",
     "mochainon": "^2.0.0",
+    "require-npm4-to-publish": "^1.0.0",
     "resin-lint": "^1.4.0",
     "versionist": "^2.8.1"
   }

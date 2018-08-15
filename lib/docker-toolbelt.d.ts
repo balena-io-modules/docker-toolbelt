@@ -1,5 +1,3 @@
-import { static } from 'express';
-
 import * as Bluebird from 'bluebird';
 import * as Docker from 'dockerode';
 

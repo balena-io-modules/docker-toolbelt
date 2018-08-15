@@ -3,6 +3,7 @@
   "version": "3.2.1",
   "description": "Some tools for docker",
   "main": "lib/docker-toolbelt.js",
+  "types": "lib/docker-toolbelt.d.ts",
   "scripts": {
     "prepublish": "npm run test && coffee -c lib",
     "lint": "resin-lint lib",
@@ -20,6 +21,8 @@
   },
   "homepage": "https://github.com/resin-io-modules/docker-toolbelt#readme",
   "dependencies": {
+    "@types/bluebird": "^3.5.23",
+    "@types/dockerode": "^2.5.5",
     "bluebird": "^3.4.1",
     "dockerode": "^2.5.0",
     "event-stream": "^3.3.3",

@@ -29,7 +29,7 @@
     "dockerode": "^2.5.0",
     "event-stream": "^3.3.3",
     "randomstring": "^1.1.5",
-    "resin-semver": "^1.3.0",
+    "resin-semver": "^1.4.0",
     "tar-stream": "^1.5.2"
   },
   "devDependencies": {

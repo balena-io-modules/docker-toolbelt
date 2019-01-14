@@ -337,13 +337,17 @@ DockerToolbelt::createDeltaAsync = (src, dest, onProgress) ->
 #          { registry: "registry.resinstaging.io", imageName: "resin/rpi" }
 DockerToolbelt::getRegistryAndName = Promise.method (image) ->
 	# Matches (registry)/(repo)(optional :tag or @digest)
-	# The regex for digest is adapted from https://github.com/docker/distribution/blob/95daa793b83a21656fe6c13e6d5cf1c3999108c7/reference/regexp.go#L44
-	match = image.match(/^(?:([^\/:.]+\.[^\/:]+(?::[0-9]+)?)\/)?([^\/:@]+(?:\/[^\/:@]+)?)(?:(?::(.*))|(?:@([A-Za-z][A-Za-z0-9]*(?:[-_+.][A-Za-z][A-Za-z0-9]*)*:[0-9a-f-A-F]{32,})))?$/)
+	# regex adapted from Docker's source code:
+	# https://github.com/docker/distribution/blob/release/2.7/reference/normalize.go#L62
+	# https://github.com/docker/distribution/blob/release/2.7/reference/regexp.go#L44
+	match = image.match /^(?:(localhost|.*?[.:].*?)\/)?(.+?)(?::(.*?))?(?:@(.*?))?$/
 	throw new Error("Could not parse the image: #{image}") if not match?
 	[ ..., registry, imageName, tagName, digest ] = match
 	if !digest? and !tagName?
 		tagName = 'latest'
-	throw new Error('Invalid image name, expected domain.tld/repo/image format.') if not imageName
+	digestMatch = digest?.match /^[A-Za-z][A-Za-z0-9]*(?:[-_+.][A-Za-z][A-Za-z0-9]*)*:[0-9a-f-A-F]{32,}$/
+	if not imageName or digest and not digestMatch
+		throw new Error('Invalid image name, expected [domain.tld/]repo/image[:tag][@digest] format')
 	return { registry, imageName, tagName, digest }
 
 # Given an object representing a docker image, in the same format as given
@@ -359,6 +363,7 @@ DockerToolbelt::compileRegistryAndName = Promise.method ({ registry = '', imageN
 			tagName = 'latest'
 		return "#{registry}#{imageName}:#{tagName}"
 	else
+		# Intentionally discard the tag when a digest exists
 		return "#{registry}#{imageName}@#{digest}"
 
 # Normalise an image name to always have a tag, with :latest being the default

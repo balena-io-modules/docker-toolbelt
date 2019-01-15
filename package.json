@@ -1,6 +1,6 @@
 {
   "name": "docker-toolbelt",
-  "version": "3.3.5",
+  "version": "3.3.6",
   "description": "Some tools for docker",
   "main": "lib/docker-toolbelt.js",
   "types": "lib/docker-toolbelt.d.ts",

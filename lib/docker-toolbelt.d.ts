@@ -10,15 +10,19 @@ declare interface ImageNameParts {
 
 declare class DockerToolbelt extends Docker {
 	constructor(opts: any);
-	static imageRootDir(image: string): Bluebird<string>;
-	static imageRootDirMounted(image: string): Bluebird.Disposer<string>;
-	static diffPaths(image: string): Bluebird<string>;
-	static aufsDiffPaths(image: string): Bluebird<string>;
-	static createEmptyImage(imageConfig: any): Bluebird<string>;
-	static createDeltaAsync(src: string, dest: string, onProgress?: (args: any) => void): Bluebird<void>;
-	static getRegistryAndName(image: any): Bluebird<ImageNameParts>;
-	static compileRegistryAndName(image: ImageNameParts): Bluebird<string>;
-	static normaliseImageName(name: string): Bluebird<string>;
+	imageRootDir(image: string): Bluebird<string>;
+	imageRootDirMounted(image: string): Bluebird.Disposer<string>;
+	diffPaths(image: string): Bluebird<string>;
+	aufsDiffPaths(image: string): Bluebird<string>;
+	createEmptyImage(imageConfig: any): Bluebird<string>;
+	createDeltaAsync(
+		src: string,
+		dest: string,
+		onProgress?: (args: any) => void,
+	): Bluebird<void>;
+	getRegistryAndName(image: any): Bluebird<ImageNameParts>;
+	compileRegistryAndName(image: ImageNameParts): Bluebird<string>;
+	normaliseImageName(name: string): Bluebird<string>;
 }
 
 export = DockerToolbelt;

@@ -19,7 +19,7 @@ declare class DockerToolbelt extends Docker {
 		src: string,
 		dest: string,
 		onProgress?: (args: any) => void,
-	): Bluebird<void>;
+	): Bluebird<string>;
 	getRegistryAndName(image: any): Bluebird<ImageNameParts>;
 	compileRegistryAndName(image: ImageNameParts): Bluebird<string>;
 	normaliseImageName(name: string): Bluebird<string>;

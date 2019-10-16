@@ -302,6 +302,11 @@ DockerToolbelt::createEmptyImage = (imageConfig) ->
 				stream.pipe(es.wait(callback))
 		.return(imageId)
 
+DockerToolbelt::isBalenaEngine = ->
+	@version().get('Engine').then (str) ->
+		return false if not str?
+		return str.toLowerCase() in ['balena', 'balaena', 'balena-engine']
+
 # Given a source and destination image, generates a delta and returns a promise
 # that resolves with the ID of the generated image. `onProgress` is an optional
 # callback that receives a single argument for the progress event that can used

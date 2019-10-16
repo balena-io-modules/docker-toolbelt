@@ -10,6 +10,7 @@ declare interface ImageNameParts {
 
 declare class DockerToolbelt extends Docker {
 	constructor(opts: any);
+	isBalenaEngine(): Bluebird<boolean>;
 	imageRootDir(image: string): Bluebird<string>;
 	imageRootDirMounted(image: string): Bluebird.Disposer<string>;
 	diffPaths(image: string): Bluebird<string>;

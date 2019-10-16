@@ -1,6 +1,7 @@
 crypto = require 'crypto'
 Promise = require 'bluebird'
 Docker = require 'dockerode'
+JSONStream = require 'JSONStream'
 semver = require 'resin-semver'
 tar = require 'tar-stream'
 es = require 'event-stream'
@@ -313,7 +314,7 @@ DockerToolbelt::createEmptyImage = (imageConfig) ->
 # The name of this method is intentionally unconventional for docker-toolbelt,
 # anticipating the appearance of a similar method *in* dockerode in the future.
 DockerToolbelt::createDeltaAsync = (src, dest, onProgress) ->
-	optsf = {
+	optsf =
 		path: '/images/delta?',
 		method: 'POST',
 		options: { src, dest },
@@ -322,15 +323,49 @@ DockerToolbelt::createDeltaAsync = (src, dest, onProgress) ->
 			200: true,
 			404: 'no such image',
 			500: 'server error',
-	}
+
+	locals = {}
+
+	progressHandler = (e) ->
+		onProgress?(e)
+		return if locals.imageId?
+		return if not e.status?
+		if (match = /^Created delta: (sha256:\w+)$/.exec(e.status))
+			locals.imageId = match[1]
+
 	return Promise.fromCallback (cb) =>
 		@modem.dial(optsf, cb)
-	.then (stream) =>
-		Promise.fromCallback (cb) =>
-			@modem.followProgress stream, cb, (e) ->
-				onProgress?(e)
-				if (match = /^Created delta: (sha256:\w+)$/.exec(e.status))
-					cb(null, match[1])
+	.then (stream) ->
+		Promise.fromCallback (cb) ->
+			followProgress stream, progressHandler, (err) ->
+				return cb(err) if err?
+				return cb(null, locals.imageId) if locals.imageId?
+				cb(new Error('Delta stream finished without reporting the image ID!'))
+
+followProgress = (stream, onProgress, onFinished) ->
+	onStreamEvent = (evt) ->
+		if !(evt instanceof Object)
+			evt = {}
+		if evt.error
+			return onStreamError(evt.error)
+		onProgress?(evt)
+
+	onStreamError = (err) ->
+		parser.removeListener('data', onStreamEvent)
+		parser.removeListener('error', onStreamError)
+		parser.removeListener('end', onStreamEnd)
+		onFinished(err)
+
+	onStreamEnd = ->
+		onFinished(null)
+
+	parser = JSONStream.parse(undefined)
+
+	parser.on('data', onStreamEvent)
+	parser.on('error', onStreamError)
+	parser.on('end', onStreamEnd)
+
+	stream.pipe(parser)
 
 # Separate string containing registry and image name into its parts.
 # Example: registry.resinstaging.io/resin/rpi

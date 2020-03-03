@@ -1,7 +1,7 @@
 crypto = require 'crypto'
 Promise = require 'bluebird'
 Docker = require 'dockerode'
-semver = require 'resin-semver'
+semver = require 'balena-semver'
 tar = require 'tar-stream'
 es = require 'event-stream'
 fs = Promise.promisifyAll(require('fs'))

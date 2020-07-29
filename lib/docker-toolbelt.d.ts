@@ -25,4 +25,4 @@ declare class DockerToolbelt extends Docker {
 	public normaliseImageName(name: string): Bluebird<string>;
 }
 
-export = DockerToolbelt;
+export default DockerToolbelt;

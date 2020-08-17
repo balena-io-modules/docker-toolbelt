@@ -8,19 +8,19 @@
     "prepublish": "require-npm4-to-publish",
     "prepublishOnly": "npm run build && npm run test",
     "build": "coffee -c lib",
-    "lint": "resin-lint lib && resin-lint --typescript lib",
+    "lint": "balena-lint lib && balena-lint --typescript lib",
     "test": "npm run lint && mocha --compilers coffee:coffeescript/register"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/resin-io-modules/docker-toolbelt.git"
+    "url": "git+https://github.com/balena-io-modules/docker-toolbelt.git"
   },
   "author": "Petros Angelatos",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/resin-io-modules/docker-toolbelt/issues"
+    "url": "https://github.com/balena-io-modules/docker-toolbelt/issues"
   },
-  "homepage": "https://github.com/resin-io-modules/docker-toolbelt#readme",
+  "homepage": "https://github.com/balena-io-modules/docker-toolbelt#readme",
   "dependencies": {
     "@types/bluebird": "^3.5.30",
     "@types/dockerode": "^2.5.24",
@@ -32,10 +32,10 @@
     "tar-stream": "^2.1.0"
   },
   "devDependencies": {
+    "@balena/lint": "^5.1.0",
     "coffeescript": "^1.12.7",
     "mocha": "^3.5.3",
     "mochainon": "^2.0.0",
-    "require-npm4-to-publish": "^1.0.0",
-    "resin-lint": "^3.3.1"
+    "require-npm4-to-publish": "^1.0.0"
   }
 }

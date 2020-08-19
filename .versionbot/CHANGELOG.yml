@@ -1,0 +1,367 @@
+- commits:
+  - author: Pagan Gazzard
+    body: ""
+    footers:
+      change-type: patch
+    hash: e89aedf563c4158894265c885cb86a834b5c9c7f
+    subject: Update to balena-lint 5.x
+  date: "2020-08-17T12:49:42Z"
+  version: 3.3.9
+- commits:
+  - author: Pagan Gazzard
+    body: ""
+    footers:
+      change-type: patch
+    hash: 499519a681284abc6697212b9c9853b9092a4ff9
+    subject: Update dependencies
+  - author: Pagan Gazzard
+    body: ""
+    hash: 7a3ad5727a8b680bccc41a152c87d20abc3aba9f
+    subject: Remove circleci in favor of balenaCI
+  date: "2020-03-04T12:52:49Z"
+  version: 3.3.8
+- commits:
+  - author: Cameron Diver
+    body: ""
+    footers:
+      change-type: patch
+      signed-off-by: Cameron Diver <cameron@balena.io>
+    hash: ef9a5835cc07ed51259ed4952a9361ca6c9ad52a
+    subject: Fix typings for class methods
+  date: "2019-01-21T17:13:54Z"
+  version: 3.3.7
+- commits:
+  - author: Paulo Castro
+    body: ""
+    footers:
+      change-type: patch
+      signed-off-by: Paulo Castro <paulo@balena.io>
+    hash: 6aa0c8d46d5446088a72099b4a49c31c9f28cd98
+    subject: Fix docker image name parsing for names with 3+ slashes
+  date: "2019-01-15T13:55:43Z"
+  version: 3.3.6
+- commits:
+  - author: Cameron Diver
+    body: ""
+    footers:
+      change-type: patch
+      signed-off-by: Cameron Diver <cameron@balena.io>
+    hash: 78d2c7b2dde671a7dbf3a940d7aa61465db5c052
+    subject: Pin event-stream to avoid flatmap-stream dependency
+  date: "2018-11-26T18:10:02Z"
+  version: 3.3.5
+- commits:
+  - author: Paulo Castro
+    body: ""
+    footers:
+      change-type: patch
+      signed-off-by: Paulo Castro <paulo@balena.io>
+    hash: acd939c46b9029dbbd64634816dcb46c8dd7f292
+    subject: Update resin-semver to support balenaOS version strings
+  date: "2018-10-24T20:16:06Z"
+  version: 3.3.4
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #28'
+    footers:
+      change-type: patch
+      signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+    hash: 3575ce1277091f084263f8b735fa96aaa8b2aca4
+    subject: 'dependencies: Update resin-semver version to support Balena OS'
+  date: "2018-09-20T09:30:03Z"
+  version: 3.3.3
+- commits:
+  - author: Cameron Diver
+    body: ""
+    footers:
+      change-type: patch
+      signed-off-by: Cameron Diver <cameron@resin.io>
+    hash: 871819ee5550b9f89cabd2a39d01ea93514fef2a
+    subject: Don't use working directory when auto-deploying
+  date: "2018-08-16T13:20:59Z"
+  version: 3.3.2
+- commits:
+  - author: Cameron Diver
+    body: ""
+    footers:
+      change-type: patch
+      signed-off-by: Cameron Diver <cameron@resin.io>
+    hash: d2a34783f53351bc52e94527c5832919ea5b3b06
+    subject: 'ci: Fix circle auto-deploying workspaces'
+  date: "2018-08-16T12:43:23Z"
+  version: 3.3.1
+- commits:
+  - author: Cameron Diver
+    body: ""
+    footers:
+      change-type: minor
+      signed-off-by: Cameron Diver <cameron@resin.io>
+    hash: caa841f496796d1be43e63a155b3ec864cc9e0d0
+    subject: 'types: Add typescript types for module'
+  - author: Cameron Diver
+    body: ""
+    footers:
+      change-type: minor
+      signed-off-by: Cameron Diver <cameron@resin.io>
+    hash: 5cb1cd4fd68d877f3010829acc3e2dfe0e369405
+    subject: 'ci: Add circleci auto-deploy configuration'
+  date: "2018-08-15T22:16:54Z"
+  version: 3.3.0
+- commits:
+  - author: Pablo Carranza Velez
+    body: |-
+      Assignment of the `digest` variable in getRegistryAndName and compileRegistryAndName would overwrite the function, causing
+      errors in createEmptyImage.
+    footers:
+      change-type: patch
+      signed-off-by: Pablo Carranza Velez <pablo@resin.io>
+    hash: d31ce22fa993872e971185f58a9b53e4506ab52a
+    subject: Fix a scoping issue that would cause the digest function to be overwritten,
+      by renaming it to getDigest
+  date: "2018-01-10T16:47:15Z"
+  version: 3.2.1
+- commits:
+  - author: Pablo Carranza Velez
+    body: |-
+      We add an additional "digest" field to the object returned by getRegistryAndName, which is populated  with the digest
+      when the image has digest instead of tag. Otherwise behavior us the same as before.
+      compileRegistryAndName now accepts a digest field too.
+      normaliseImageName worked with digests but it was just lucky, as getRegistryAndName would match the "@sha256" as part of the repo.
+      This change makes the support intentional, and matching the image name in the correct way.
+    footers:
+      change-type: minor
+      signed-off-by: Pablo Carranza Velez <pablo@resin.io>
+    hash: 57f687cb904c98f752a925fa7899866816fbf1fa
+    subject: Allow getRegistryAndName, compileRegistryAndName, and normaliseImageName
+      to work with images with digest
+  date: "2017-12-19T08:32:58Z"
+  version: 3.2.0
+- commits:
+  - author: Akis Kesoglou
+    body: ""
+    footers:
+      change-type: minor
+    hash: e033e07c599b455d4b384e3bf083f5c126c355c8
+    subject: Add method for generating Balena deltas
+  date: "2017-11-10T13:17:44Z"
+  version: 3.1.0
+- commits:
+  - author: Akis Kesoglou
+    body: ""
+    hash: eab0f575bcc2d074d74049090e351e19653b716a
+    subject: Remove unused variable
+  - author: Akis Kesoglou
+    body: |-
+      We did try to handle cases where the opts passed to mount exceeded page size by passing relative paths to mount. This apparently doesn’t always work. With this commit, we now read each layer’s `link` file that contains the name of its alias under `/var/lib/docker/overlay2/l` directory, which makes for a very short path name.
+      For example the diff directory `/var/lib/docker/overlay2/223c2864175491657d238e2664251df13b63adb8d050924fd1bfcdb278b866f7/diff` now is referenced as `l/NFYKDW6APBCCUCTOUSYDH4DXAT`, which is much shorter.
+      See: https://docs.docker.com/engine/userguide/storagedriver/overlayfs-driver/#image-and-container-layers-on-disk
+    footers:
+      change-type: patch
+    hash: 84da0ae19824267cbbea58e47dfa48c4193c97db
+    subject: Fix mounting overlay when the mount options exceed page size
+  date: "2017-10-19T05:58:26Z"
+  version: 3.0.3
+- commits:
+  - author: Lucian Buzzo
+    body: 'Connects to #19'
+    footers:
+      change-type: patch
+    hash: b2724a15294878fca6b4bc6394abb1d6d3a432d6
+    subject: Use resin-semver for safe standardized handling of OS versions
+  - author: Lucian Buzzo
+    body: ""
+    hash: 887c3d3a1de0f332fb5bcf3698093a6f35fa16c1
+    subject: address PR comments
+  date: "2017-09-15T16:13:27Z"
+  version: 3.0.2
+- commits:
+  - author: Pablo Carranza Velez
+    body: ""
+    footers:
+      change-type: patch
+      signed-off-by: Pablo Carranza Velez <pablo@resin.io>
+    hash: 00db37b1231e1500864ab86c1c1545f1def7dd76
+    subject: Fix setting default Promise when no options are passed
+  date: "2017-07-04T04:23:50Z"
+  version: 3.0.1
+- commits:
+  - author: Pablo Carranza Velez
+    body: |-
+      This module used to promisify and mutate the Docker class from dockerode, which is bad.
+      It also mutated images and containers by promisifying their prototype.
+      Now we extend that class and use dockerode's promise support instead of promisifying - but we pass bluebird
+      as the Promise for dockerode to use.
+      We also add mocha (with mochainon) and some basic tests that only cover testing that this returns a valid promise-aware
+      docker object.
+      No tests for the docker-toolbelt specific functions were added yet (should be added soon, hopefully...).
+    footers:
+      change-type: major
+      signed-off-by: Pablo Carranza Velez <pablo@resin.io>
+    hash: b16c03ad9791816e4886299e09a432468c65ae7c
+    subject: Use dockerode's promise functionality (docker will not have Async-suffixed
+      methods)
+  date: "2017-07-04T01:33:25Z"
+  version: 3.0.0
+- commits:
+  - author: Cameron Diver
+    body: |-
+      If undefined is passed as the registry name, compileRegistryAndName will
+      insert the literal 'undefined' at the start of the image name. This
+      commit fixes that.
+    footers:
+      change-type: patch
+      signed-off-by: Cameron Diver <cameron@resin.io>
+    hash: ab9687a95112384055aafa02d05fc71b812e499a
+    subject: Fix bug when undefined is passed to compileRegistryAndName
+  date: "2017-06-28T14:31:21Z"
+  version: 2.0.1
+- commits:
+  - author: Cameron Diver
+    body: |-
+      The function takes an object representing a docker image and joins it
+      together. It should take the output of getRegistryAndName and give the
+      input.
+    footers:
+      change-type: minor
+      signed-off-by: Cameron Diver <cameron@resin.io>
+    hash: a74ed73a59c8e70af63bf11b992ca3312ead3647
+    subject: Add compileRegistryAndName as a counterpart to getRegistryAndName
+  - author: Cameron Diver
+    body: |-
+      This function builds on both getRegistryAndName and
+      compileRegistryAndName, to produce image names that are consistent.
+    footers:
+      change-type: minor
+      signed-off-by: Cameron Diver <cameron@resin.io>
+    hash: 8bfc837b2c628eb5dbd2f3a04114a881b44d1de0
+    subject: Add normalizeImageName function
+  - author: Cameron Diver
+    body: ""
+    footers:
+      change-type: major
+      signed-off-by: Cameron Diver <cameron@resin.io>
+    hash: 53bd2d5a630de9784afdce98a10a0d5171b9acbe
+    subject: Remove default registry name from getRegistryAndName
+  date: "2017-06-27T18:04:41Z"
+  version: 2.0.0
+- commits:
+  - author: Akis Kesoglou
+    body: ""
+    footers:
+      change-type: patch
+    hash: c3e9333a9122fb216e721afd400aee7486e44b52
+    subject: Properly ignore error when mount target dir exists
+  - author: Akis Kesoglou
+    body: |-
+      The overlay2 driver adds support for more than one “lower” layer (quite similar to aufs) and changed how an OverlayFS is represented on disk. This commit adds support for inspecting the “diff” layer and mounting an fs created with overlay2.
+      This deprecates `aufsDiffPaths`, which now also applies to overlay2, introducing a new method `diffPaths` that can work with both aufs and overlay2.
+    footers:
+      change-type: minor
+    hash: f7a8b0890d5d41f83fcd4cddfca73c792373464f
+    subject: Added support for inspecting and mounting overlay2 fs
+  - author: Akis Kesoglou
+    body: ""
+    hash: 378529475e4c19daf358c3ce306f8a1b83fea318
+    subject: Address review feedback
+  date: "2017-06-23T07:47:02Z"
+  version: 1.4.0
+- commits:
+  - author: Pablo Carranza Velez
+    body: ""
+    footers:
+      change-type: patch
+      signed-off-by: Pablo Carranza Velez <pablo@resin.io>
+    hash: 0ae73a06921aa1cb9710a18885ce4be804bad7ae
+    subject: Update versionist to v2.8.1 and remove unnecessary versionist.conf.js
+  - author: Pablo Carranza Velez
+    body: |-
+      In docker 17.03, docker moved to a not-quite-semver-compatible versioning
+      scheme. We add a `true` third argument to the semver comparison to make it
+      more forgiving and properly compare 17.03.1-ce and the like as if they were semver.
+    footers:
+      change-type: patch
+      signed-off-by: Pablo Carranza Velez <pablo@resin.io>
+    hash: f90fc4b2d5311c2158b94ed4f77b842f66608dc1
+    subject: Support docker 17.03 by making the semver check more forgiving
+  date: "2017-05-04T20:21:45Z"
+  version: 1.3.4
+- commits:
+  - author: Pablo Carranza Velez
+    body: |-
+      We also add the possibility to use `npm run versionist` so that we
+      can use the local versionist version installed from package.json.
+      Also rewrite the changelog to match the versionist default format.
+    footers:
+      change-type: patch
+      signed-off-by: Pablo Carranza Velez <pablo@resin.io>
+    hash: 8136760062888d6b86fae51d1e0b543fb685fd6d
+    subject: Add versionist with the default configuration
+  - author: Pablo Carranza Velez
+    body: |-
+      mount limits the mount options to page size (usually 4096 bytes), so we do what docker does
+      to mount when layers don't fit in that: we mount with as much as we can fit and then
+      remount appending each remaining layer. We stick to 4096 instead of actually finding the page size
+      cause it's assured to work (4096 is the minimum in the arches we support), reduces complexity and
+      shouldn't generate much overhead (we don't care about a few extra remounts).
+      Based on https://github.com/docker/docker/blob/b937aa8e6968d805527d163e6f477d496ceb88d7/daemon/graphdriver/aufs/aufs.go#L595
+      We also introduce 8 random characters to the temporary path we use for the aufs mount, so that
+      several calls to this function can work independently.
+    footers:
+      change-type: patch
+      signed-off-by: Pablo Carranza Velez <pablo@resin.io>
+    hash: 0f528f5a476b63081f023468aac4fae7556a62b0
+    subject: Fix mounting aufs when there's several layers and use random path for
+      mount.
+  date: "2016-12-19T15:38:10Z"
+  version: 1.3.3
+- commits:
+  - author: Pablo Carranza Velez
+    body: ""
+    hash: 8097e904c203cc7d52cc799db5744bc99d0e445f
+    subject: 'Fix: promisify all Docker functions'
+  - author: Cameron Diver
+    body: ""
+    hash: 7781812b1c10852e9a85f44e639b9d4a2071ca78
+    subject: Add promisifyAll multiArgs parameter
+  - author: Cameron Diver
+    body: ""
+    hash: f7f9140b8e2b89cc1cac9642266164b438587251
+    subject: Only add multiArgs for Docker.run
+  - author: Cameron Diver
+    body: ""
+    hash: 78d3893501627f4582dbe710cc6e2dcd39fb1a28
+    subject: Fix indentation
+  - author: Cameron Diver
+    body: ""
+    hash: 5768483d55f51b27a439cf80f21a2d2589f7402d
+    subject: More human readable changelog
+  - author: Cameron Diver
+    body: ""
+    hash: ca2772216afb87192bb71a0b9b8f64f7544a5a42
+    subject: More human readable changelog
+  - author: Pablo Carranza Velez
+    body: |-
+      imageRootDir now works for aufs, but shows only the last diff in the image.
+      To have fully compatible behavior, imageRootDirMounted should be used, so that
+      the full image rootfs gets mounted at the returned path. For other drivers,
+      behavior will be the same as imageRootDir (only it has to be used with Promise.using).
+      aufsDiffPaths allows getting the paths for each layer diff in an aufs-stored image.
+    hash: 0ac1fe445e176c2a5fd2fcbb4c831c3f3966df5e
+    subject: Implement imageRootDirMounted and aufsDiffPaths
+  - author: Pablo Carranza Velez
+    body: ""
+    hash: 4645540aec7e11ec9da29557dee374af3b3cef8a
+    subject: Improve the regex used for getRegistryAndName
+  - author: Pablo Carranza Velez
+    body: ""
+    hash: 0e3c9a4188557e636ecb4073d33a4fc9cedac7a1
+    subject: Add Docker::getRegistryAndName(image)
+  date: "2016-11-18T17:09:47Z"
+  version: 1.3.2
+- commits:
+  - author: Kostas Lekkas
+    body: ""
+    hash: 020a75bf3304c983cce0d3d204bd3f024377c3f4
+    subject: Support vfs/overlay in Docker::imageRoorDir()
+  date: "2016-09-23T09:15:48Z"
+  version: 1.1.0

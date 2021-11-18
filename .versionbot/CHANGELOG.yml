@@ -1,4 +1,14 @@
 - commits:
+    - subject: Fix build referencing non-existent file
+      hash: a3c476f21ea0c3668f99c812c42ad68f97d6a6b5
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Akis Kesoglou
+  version: 4.0.1
+  date: 2021-11-18T14:51:29.092Z
+- commits:
     - subject: Modernise and update to typescript
       hash: 4890798e59fe605e443c5099cbea36869408d595
       body: >

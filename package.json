@@ -2,14 +2,19 @@
   "name": "docker-toolbelt",
   "version": "3.3.10",
   "description": "Some tools for docker",
-  "main": "lib/docker-toolbelt.js",
-  "types": "lib/docker-toolbelt.d.ts",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "engines": {
+    "node": ">=12.0.0"
+  },
   "scripts": {
-    "prepublish": "require-npm4-to-publish",
-    "prepublishOnly": "npm run build && npm run test",
-    "build": "coffee -c lib",
-    "lint": "balena-lint lib && balena-lint --typescript lib",
-    "test": "npm run lint && mocha --compilers coffee:coffeescript/register"
+    "clean": "rimraf build",
+    "build": "npm run clean && tsc -p tsconfig.build.json",
+    "lint": "balena-lint --typescript lib tests",
+    "lint-fix": "balena-lint --typescript --fix lib tests",
+    "test": "npm run build && npm run lint && npm run test:fast",
+    "test:fast": "mocha -r ts-node/register --reporter spec tests/**/*.spec.ts",
+    "prepack": "npm run build"
   },
   "repository": {
     "type": "git",
@@ -22,20 +27,26 @@
   },
   "homepage": "https://github.com/balena-io-modules/docker-toolbelt#readme",
   "dependencies": {
-    "@types/bluebird": "^3.5.30",
-    "@types/dockerode": "^2.5.24",
+    "@types/dockerode": "^3.3.0",
+    "@types/event-stream": "^3.3.34",
+    "@types/randomstring": "^1.1.8",
+    "@types/tar-stream": "^2.1.0",
     "balena-semver": "^2.2.0",
-    "bluebird": "^3.7.2",
-    "dockerode": "^2.5.8",
+    "dockerode": "^3.3.1",
     "event-stream": "3.3.5",
     "randomstring": "^1.1.5",
     "tar-stream": "^2.1.0"
   },
   "devDependencies": {
     "@balena/lint": "^5.1.0",
-    "coffeescript": "^1.12.7",
-    "mocha": "^3.5.3",
-    "mochainon": "^2.0.0",
-    "require-npm4-to-publish": "^1.0.0"
+    "@types/chai": "^4.2.22",
+    "@types/mocha": "^9.0.0",
+    "@types/sinon": "^10.0.6",
+    "chai": "^4.3.4",
+    "mocha": "^8.4.0",
+    "rimraf": "^3.0.2",
+    "sinon": "^12.0.1",
+    "ts-node": "^10.4.0",
+    "typescript": "^4.4.4"
   }
 }

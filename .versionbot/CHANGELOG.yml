@@ -1,4 +1,16 @@
 - commits:
+    - subject: Improve the README with a better description of the module
+      hash: b1220e79353729f2d96d5984ef48f8caaa105c11
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+        signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+      author: Lucian Buzzo
+  version: 4.0.2
+  date: 2021-11-18T16:57:24.565Z
+- commits:
     - subject: Fix build referencing non-existent file
       hash: a3c476f21ea0c3668f99c812c42ad68f97d6a6b5
       body: ''

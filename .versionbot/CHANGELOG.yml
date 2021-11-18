@@ -1,4 +1,24 @@
 - commits:
+    - subject: Add typedoc generation and autopublish to docs branch
+      hash: 2849441ba82c80cb5686b22615e130fa481b1e11
+      body: >
+        This commit uses typedoc to generate documentation from source code.
+
+        It also adds a small GitHub action that will build and publish the docs
+
+        to the `docs` branch after a version bump, so that they can be served
+        from
+
+        GitHub pages.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+        signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+      author: Lucian Buzzo
+  version: 4.0.3
+  date: 2021-11-18T17:39:36.270Z
+- commits:
     - subject: Improve the README with a better description of the module
       hash: b1220e79353729f2d96d5984ef48f8caaa105c11
       body: ''

@@ -1,4 +1,36 @@
 - commits:
+    - subject: Modernise and update to typescript
+      hash: 4890798e59fe605e443c5099cbea36869408d595
+      body: >
+        Breaking changes:
+
+        - aufsdiffpaths now deprecate, use diffPaths instead
+
+        - Minimum node version is 12
+
+        - Resolves native promises instead of Bluebird
+
+        - Switch to non-bluebird disposer pattern, to maintain native promise
+        interface, use "withImageRootDirMounted" instead of
+        "imagerootdirmounted"
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+        signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+      author: Lucian Buzzo
+    - subject: Upgrade dockerode to fix new Buffer deprecation warning
+      hash: 8459fa75d2efece7749c8150408e95e40c2a09ca
+      body: ''
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Cameron Diver <cameron@balena.io>
+        signed-off-by: Cameron Diver <cameron@balena.io>
+      author: Cameron Diver
+  version: 4.0.0
+  date: 2021-11-18T12:55:22.284Z
+- commits:
     - subject: Add .versionbot/CHANGELOG.yml for nested changelogs
       hash: ccd1e99c5501257f1304f4cb68dd02383411e0b8
       body: ''

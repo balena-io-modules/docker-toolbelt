@@ -14,6 +14,7 @@
     "lint-fix": "balena-lint --typescript --fix lib tests",
     "test": "npm run build && npm run lint && npm run test:fast",
     "test:fast": "mocha -r ts-node/register --reporter spec tests/**/*.spec.ts",
+    "doc": "typedoc lib/ && touch docs/.nojekyll",
     "prepack": "npm run build"
   },
   "repository": {
@@ -47,6 +48,7 @@
     "rimraf": "^3.0.2",
     "sinon": "^12.0.1",
     "ts-node": "^10.4.0",
+    "typedoc": "^0.22.9",
     "typescript": "^4.4.4"
   },
   "versionist": {

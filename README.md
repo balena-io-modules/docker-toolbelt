@@ -25,3 +25,9 @@ const belt = new DockerToolbelt({
 
 const containers = await belt.listContainers()
 ```
+
+## Documentation
+
+[![Publish Documentation](https://github.com/balena-io-modules/docker-toolbelt/actions/workflows/publish-docs.yml/badge.svg)](https://github.com/balena-io-modules/docker-toolbelt/actions/workflows/publish-docs.yml)
+
+Visit the website for complete documentation: https://balena-io-modules.github.io/docker-toolbelt

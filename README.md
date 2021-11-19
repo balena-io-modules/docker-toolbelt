@@ -2,7 +2,7 @@
 
 A belt full of tools for working with Docker.
 
-Docker Toolbelt extends [dockerode](https://github.com/apocas/dockerode) with additional utilities to make working with Docker a breeze. This module also supports [balenaEngine](https://github.com/balena-os/balena-engine), notably it's [delta generation feature](https://www.balena.io/engine/docs/#Container-deltas).
+Docker Toolbelt extends [dockerode](https://github.com/apocas/dockerode) with additional utilities to make working with Docker a breeze. This module also supports [balenaEngine](https://github.com/balena-os/balena-engine), notably its [delta generation feature](https://www.balena.io/engine/docs/#Container-deltas).
 
 ## Installation
 

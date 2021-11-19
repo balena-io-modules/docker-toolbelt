@@ -1,4 +1,16 @@
 - commits:
+    - subject: Fix small typo in README
+      hash: 0a31b8b5b160a2cead6b8d76c4f78e0fe364438a
+      body: ''
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+        signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+      author: Lucian Buzzo
+  version: 4.0.4
+  date: 2021-11-19T11:36:55.471Z
+- commits:
     - subject: Add typedoc generation and autopublish to docs branch
       hash: 2849441ba82c80cb5686b22615e130fa481b1e11
       body: >

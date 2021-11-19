@@ -1,4 +1,16 @@
 - commits:
+    - subject: Export ImageNameParts interface
+      hash: e48fe88a7f5cd57696532b8f081f182704876e45
+      body: ''
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+        signed-off-by: Lucian Buzzo <lucian.buzzo@gmail.com>
+      author: Lucian Buzzo
+  version: 4.1.0
+  date: 2021-11-19T13:55:33.051Z
+- commits:
     - subject: Fix small typo in README
       hash: 0a31b8b5b160a2cead6b8d76c4f78e0fe364438a
       body: ''

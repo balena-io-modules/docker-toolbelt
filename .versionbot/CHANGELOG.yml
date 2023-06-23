@@ -1,4 +1,23 @@
 - commits:
+    - subject: Export ImageNameParts interface
+      hash: ad473d4decb373fd8a02fec1d36b57d69c82ef4c
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: dfunckt
+    - subject: Delete docker-toolbelt.ts
+      hash: 53bbb45d81fd2e331d8a9e973b5d5d8f55f27a57
+      body: |
+        For some reason it was added back by #47 
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: dfunckt
+  version: 4.1.2
+  title: ""
+  date: 2023-06-23T11:59:47.638Z
+- commits:
     - subject: Use Flowzone for CI
       hash: 24d36412f9ca6dbb141f92a185c8ae9ecb198211
       body: ""

@@ -12,7 +12,7 @@ const execAsync = promisify(exec);
 
 const MIN_PAGE_SIZE = 4096;
 
-interface ImageNameParts {
+export interface ImageNameParts {
 	registry: string;
 	imageName: string;
 	tagName: string;

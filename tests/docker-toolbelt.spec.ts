@@ -133,9 +133,7 @@ describe('DockerToolbelt', function () {
 			],
 		];
 		testVector.forEach(([fullName, [registry, imageName, tagName, digest]]) => {
-			const components = DockerToolbelt.prototype.getRegistryAndName(
-				fullName as string,
-			);
+			const components = d.getRegistryAndName(fullName as string);
 			expect(components).to.deep.equal({
 				registry,
 				imageName,
@@ -145,7 +143,7 @@ describe('DockerToolbelt', function () {
 		});
 	});
 
-	return it('successfully compiles a list of sample docker image names', function () {
+	it('successfully compiles a list of sample docker image names', function () {
 		const u = undefined;
 		const testVector = [
 			['busybox:latest', [u, 'busybox', u, u]],
@@ -187,19 +185,14 @@ describe('DockerToolbelt', function () {
 				['eu.gcr.io', 'aa-bb-33/foo/bar', '', u],
 			],
 		];
-		return Promise.all(
-			testVector.map(
-				([expectedFullName, [registry, imageName, tagName, digest]]) => {
-					return DockerToolbelt.prototype
-						.compileRegistryAndName({
-							registry,
-							imageName,
-							tagName,
-							digest,
-						} as any)
-						.then((fullName) => expect(fullName).to.equal(expectedFullName));
-				},
-			),
-		);
+		testVector.forEach(([expected, [registry, imageName, tagName, digest]]) => {
+			const fullName = d.compileRegistryAndName({
+				registry,
+				imageName,
+				tagName,
+				digest,
+			} as any);
+			expect(fullName).to.equal(expected);
+		});
 	});
 });

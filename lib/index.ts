@@ -533,12 +533,12 @@ export class DockerToolbelt extends Docker {
 	// can be used in Docker command etc
 	// Example: { registry: "registry.resinstaging.io", imageName: "resin/rpi", tagName: "1234"}
 	// 		=> registry.resinstaging.io/resin/rpi:1234
-	async compileRegistryAndName({
+	compileRegistryAndName({
 		registry = '',
 		imageName,
 		tagName = '',
 		digest,
-	}: ImageNameParts): Promise<string> {
+	}: ImageNameParts): string {
 		if (registry !== '') {
 			registry += '/';
 		}
@@ -555,8 +555,8 @@ export class DockerToolbelt extends Docker {
 	}
 
 	// Normalise an image name to always have a tag, with :latest being the default
-	async normaliseImageName(image: string): Promise<string> {
-		const result = await this.getRegistryAndName(image);
+	normaliseImageName(image: string): string {
+		const result = this.getRegistryAndName(image);
 		return this.compileRegistryAndName(result);
 	}
 }

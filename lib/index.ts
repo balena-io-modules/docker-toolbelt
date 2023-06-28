@@ -12,6 +12,13 @@ const execAsync = promisify(exec);
 
 const MIN_PAGE_SIZE = 4096;
 
+export type Callback<T> = (error?: any, result?: T) => void;
+
+export interface CreateDeltaOptions {
+	src: string;
+	dest: string;
+}
+
 export interface ImageNameParts {
 	registry: string;
 	imageName: string;
@@ -447,25 +454,52 @@ export class DockerToolbelt extends Docker {
 		return imageId;
 	}
 
-	// Given a source and destination image, generates a delta and returns a promise
-	// that resolves with the ID of the generated image. `onProgress` is an optional
-	// callback that receives a single argument for the progress event that can used
-	// to follow progress.
-	//
-	// Deltas are currently only available with Balena, but this method makes no
-	// effort to determine whether that's the case.
-	//
-	// The name of this method is intentionally unconventional for docker-toolbelt,
-	// anticipating the appearance of a similar method *in* dockerode in the future.
-	async createDeltaAsync(
-		src: any,
-		dest: any,
-		onProgress: (arg0: any) => void,
-	): Promise<string> {
+	/**
+	 * Given a source and a destination image, invokes `/images/delta` and returns a
+	 * promise to a readable stream for following progress. Can also be called with a
+	 * callback as the second argument instead, similar to how Dockerode methods
+	 * support both a callback and async interface.
+	 *
+	 * Callers can extract the delta image ID by parsing the stream like so:
+	 *
+	 * ```
+	 * const stream = await docker.createDelta({ src, dest });
+	 * const deltaId = await new Promise<string>((resolve, reject) => {
+	 *   let imageId: string | undefined = null;
+	 *   function onFinish(err) {
+	 *     if (err != null) {
+	 *       return reject(err);
+	 *     }
+	 *     if (imageId == null) {
+	 *       return reject(new Error('failed to parse delta image ID!'));
+	 *     }
+	 *     resolve(imageId);
+	 *   }
+	 *   docker.modem.followProgress(stream, onFinish, (e: any) => {
+	 *     const match = /^Created delta: (sha256:\w+)$/.exec(e.status);
+	 *     if (match && imageId == null) {
+	 *       imageId = match[1];
+	 *     }
+	 *   });
+	 * });
+	 * ```
+	 *
+	 * Deltas are currently only available with balenaEngine, but this method makes
+	 * no effort to determine whether that's the case.
+	 */
+	async createDelta(opts: CreateDeltaOptions): Promise<NodeJS.ReadableStream>;
+	createDelta(
+		opts: CreateDeltaOptions,
+		callback: Callback<NodeJS.ReadableStream>,
+	): void;
+	createDelta(
+		opts: CreateDeltaOptions,
+		callback?: Callback<NodeJS.ReadableStream>,
+	): void | Promise<NodeJS.ReadableStream> {
 		const optsf = {
 			path: '/images/delta?',
 			method: 'POST',
-			options: { src, dest },
+			options: opts,
 			isStream: true,
 			statusCodes: {
 				200: true,
@@ -473,24 +507,21 @@ export class DockerToolbelt extends Docker {
 				500: 'server error',
 			},
 		};
-		// TODO: fix this any typing
-		const stream: any = await promiseFromCallback((cb: any) => {
-			return this.modem.dial(optsf, cb);
-		});
-
-		const id: string = await promiseFromCallback((cb: any) => {
-			return this.modem.followProgress(stream, cb, function (e) {
-				if (typeof onProgress === 'function') {
-					onProgress(e);
-				}
-				const match = /^Created delta: (sha256:\w+)$/.exec(e.status);
-				if (match) {
-					return cb(null, match[1]);
-				}
+		if (callback == null) {
+			const modem = this.modem;
+			return new modem.Promise(function (resolve, reject) {
+				modem.dial(optsf, function (err, data) {
+					if (err) {
+						return reject(err);
+					}
+					resolve(data as NodeJS.ReadableStream);
+				});
 			});
-		});
-
-		return id;
+		} else {
+			this.modem.dial(optsf, function (err, data) {
+				callback(err, data as NodeJS.ReadableStream);
+			});
+		}
 	}
 
 	// Separate string containing registry and image name into its parts.

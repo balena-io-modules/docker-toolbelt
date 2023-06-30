@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 import { promisify } from 'util';
-import * as Docker from 'dockerode';
+import Docker from 'dockerode';
 import * as semver from 'balena-semver';
 import * as tar from 'tar-stream';
 import * as es from 'event-stream';

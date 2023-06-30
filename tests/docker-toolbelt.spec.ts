@@ -1,4 +1,4 @@
-import * as Dockerode from 'dockerode';
+import Dockerode from 'dockerode';
 import { DockerToolbelt } from '../lib';
 import { expect } from 'chai';
 import { stub } from 'sinon';

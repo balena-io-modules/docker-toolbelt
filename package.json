@@ -5,7 +5,7 @@
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=18.0.0"
   },
   "scripts": {
     "clean": "rimraf build",
@@ -21,7 +21,7 @@
     "type": "git",
     "url": "git+https://github.com/balena-io-modules/docker-toolbelt.git"
   },
-  "author": "Petros Angelatos",
+  "author": "Balena Ltd.",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/balena-io-modules/docker-toolbelt/issues"

@@ -590,4 +590,15 @@ export class DockerToolbelt extends Docker {
 		const result = this.getRegistryAndName(image);
 		return this.compileRegistryAndName(result);
 	}
+
+	async isBalenaEngine(): Promise<boolean> {
+		const versionInfo = await this.version();
+		const engine = (versionInfo as any)['Engine'];
+		if (engine == null) {
+			return false;
+		}
+		return ['balena', 'balaena', 'balena-engine'].includes(
+			engine.toLowerCase(),
+		);
+	}
 }

@@ -7,7 +7,7 @@
 		"removeComments": true,
 		"sourceMap": true,
 		"strict": true,
-		"target": "es2015",
+		"target": "es2021",
 		"declaration": true,
 		"skipLibCheck": true,
 		"esModuleInterop": true
@@ -15,5 +15,9 @@
 	"include": [
 		"lib/**/*.ts",
 		"tests/**/*.ts",
-	]
+		"typings/**/*.d.ts",
+	],
+	"ts-node": {
+		"files": true
+	}
 }

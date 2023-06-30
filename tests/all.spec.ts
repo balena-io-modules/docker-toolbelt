@@ -1,55 +1,9 @@
-import Dockerode from 'dockerode';
-import { DockerToolbelt } from '../lib';
+import * as dt from '../lib';
 import { expect } from 'chai';
-import { stub } from 'sinon';
 
 describe('DockerToolbelt', function () {
-	const d = new DockerToolbelt({ socketPath: '/foo/docker.sock' });
-
-	it('instantiates a docker object with the passed options', function () {
-		expect(d).to.have.property('modem');
-		return expect((d.modem as any).socketPath).to.equal('/foo/docker.sock');
-	});
-
-	it('provides promisified docker functions', function () {
-		stub(d.modem, 'dial').callsArgWith(1, null, [{ id: '1' }, { id: '2' }]);
-		return d.listImages().then((images) => {
-			(d.modem.dial as any).restore();
-			return expect(images).to.deep.equal([{ id: '1' }, { id: '2' }]);
-		});
-	});
-
-	it('provides promisified functions for docker images', function () {
-		const img = d.getImage('nonExistentImageName1234');
-		// This call is expected to throw either because there's no docker or the image doesn't exist
-		// But all we care about is that it throws
-		const promise = img.inspect();
-		expect(promise).to.be.an.instanceOf(Promise);
-		// tslint:disable-next-line: no-empty
-		promise.catch(function () {});
-		return expect(promise).to.throw;
-	});
-
-	it('provides promisified functions for docker containers', function () {
-		const c = d.getContainer('nonExistentContainerName1234');
-		// This call is expected to throw either because there's no docker or the image doesn't exist
-		// But all we care about is that it throws
-		const promise = c.inspect();
-		expect(promise).to.be.an.instanceOf(Promise);
-		// tslint:disable-next-line: no-empty
-		promise.catch(function () {});
-		return expect(promise).to.throw;
-	});
-
-	it('does not mutate the dockerode library', function () {
-		const d2 = new Dockerode();
-		expect((d2 as any).listImagesAsync).to.be.undefined;
-		expect((d2.getImage('foo') as any).inspectAsync).to.be.undefined;
-		return expect((d2 as any).diffPaths).to.be.undefined;
-	});
-
 	it('splits an image name into its components with getRegistryAndName', function () {
-		const components = d.getRegistryAndName(
+		const components = dt.getRegistryAndName(
 			'someregistry.com/some/repo:sometag',
 		);
 		expect(components).to.deep.equal({
@@ -61,7 +15,7 @@ describe('DockerToolbelt', function () {
 	});
 
 	it('splits an image name into its components defaulting tag to latest with getRegistryAndName', function () {
-		const components = d.getRegistryAndName('someregistry.com/some/repo');
+		const components = dt.getRegistryAndName('someregistry.com/some/repo');
 		expect(components).to.deep.equal({
 			registry: 'someregistry.com',
 			imageName: 'some/repo',
@@ -71,7 +25,7 @@ describe('DockerToolbelt', function () {
 	});
 
 	it('matches an image name with digest with getRegistryAndName', function () {
-		const components = d.getRegistryAndName(
+		const components = dt.getRegistryAndName(
 			'someregistry.com/some/repo@sha256:0123456789abcdef0123456789abcdef',
 		);
 		expect(components).to.deep.equal({
@@ -84,7 +38,7 @@ describe('DockerToolbelt', function () {
 
 	it('throws when running getRegistryAndName if the image name has an invalid digest', function () {
 		expect(() =>
-			d.getRegistryAndName(
+			dt.getRegistryAndName(
 				'someregistry.com/some/repo@sha256:0123456789abcdef0123456789abcdeg',
 			),
 		).to.throw;
@@ -133,9 +87,7 @@ describe('DockerToolbelt', function () {
 			],
 		];
 		testVector.forEach(([fullName, [registry, imageName, tagName, digest]]) => {
-			const components = DockerToolbelt.prototype.getRegistryAndName(
-				fullName as string,
-			);
+			const components = dt.getRegistryAndName(fullName as string);
 			expect(components).to.deep.equal({
 				registry,
 				imageName,
@@ -145,7 +97,7 @@ describe('DockerToolbelt', function () {
 		});
 	});
 
-	return it('successfully compiles a list of sample docker image names', function () {
+	it('successfully compiles a list of sample docker image names', function () {
 		const u = undefined;
 		const testVector = [
 			['busybox:latest', [u, 'busybox', u, u]],
@@ -187,19 +139,14 @@ describe('DockerToolbelt', function () {
 				['eu.gcr.io', 'aa-bb-33/foo/bar', '', u],
 			],
 		];
-		return Promise.all(
-			testVector.map(
-				([expectedFullName, [registry, imageName, tagName, digest]]) => {
-					return DockerToolbelt.prototype
-						.compileRegistryAndName({
-							registry,
-							imageName,
-							tagName,
-							digest,
-						} as any)
-						.then((fullName) => expect(fullName).to.equal(expectedFullName));
-				},
-			),
-		);
+		testVector.forEach(([expected, [registry, imageName, tagName, digest]]) => {
+			const fullName = dt.compileRegistryAndName({
+				registry,
+				imageName,
+				tagName,
+				digest,
+			} as any);
+			expect(fullName).to.equal(expected);
+		});
 	});
 });

@@ -15,5 +15,9 @@
 	"include": [
 		"lib/**/*.ts",
 		"tests/**/*.ts",
-	]
+		"typings/**/*.d.ts",
+	],
+	"ts-node": {
+		"files": true
+	}
 }

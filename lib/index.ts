@@ -4,6 +4,7 @@ import Docker from 'dockerode';
 import * as semver from 'balena-semver';
 import * as tar from 'tar-stream';
 import * as es from 'event-stream';
+import * as JSONStream from 'JSONStream';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import * as randomstring from 'randomstring';
@@ -600,5 +601,47 @@ export class DockerToolbelt extends Docker {
 		return ['balena', 'balaena', 'balena-engine'].includes(
 			engine.toLowerCase(),
 		);
+	}
+
+	/**
+	 * DockerModem.followProgress *buffers all events internally* and
+	 * hands them all to the onFinish callback. This function is a copy
+	 * of that *without* the buffering.
+	 */
+	followProgressUnbuffered(
+		stream: NodeJS.ReadableStream,
+		onFinished: (err: Error | null) => void,
+		onProgress?: (event: any) => void,
+	) {
+		const parser = JSONStream.parse(undefined);
+
+		parser.on('data', onStreamEvent);
+		parser.on('error', onStreamError);
+		parser.on('end', onStreamEnd);
+
+		stream.pipe(parser);
+
+		function onStreamEvent(evt: any) {
+			if (!(evt instanceof Object)) {
+				evt = {};
+			}
+			if (evt.error) {
+				return onStreamError(evt.error);
+			}
+			if (onProgress) {
+				onProgress(evt);
+			}
+		}
+
+		function onStreamError(err: Error) {
+			parser.removeListener('data', onStreamEvent);
+			parser.removeListener('error', onStreamError);
+			parser.removeListener('end', onStreamEnd);
+			onFinished(err);
+		}
+
+		function onStreamEnd() {
+			onFinished(null);
+		}
 	}
 }

@@ -37,7 +37,7 @@
   "devDependencies": {
     "@balena/lint": "^5.1.0",
     "@types/chai": "^4.2.22",
-    "@types/dockerode": "^3.3.19",
+    "@types/dockerode": "^3.3.0",
     "@types/event-stream": "^3.3.34",
     "@types/mocha": "^9.0.0",
     "@types/randomstring": "^1.1.8",
@@ -53,6 +53,6 @@
     "publishedAt": "2023-06-30T15:04:30.756Z"
   },
   "peerDependencies": {
-    "dockerode": "^3.3.5"
+    "dockerode": "^3.3.0"
   }
 }

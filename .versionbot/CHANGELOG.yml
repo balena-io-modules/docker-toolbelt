@@ -1,4 +1,15 @@
 - commits:
+    - subject: Fix Dockerode type re-export
+      hash: f897444d40495e2a87baa8850c078c58ff213677
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Akis Kesoglou
+  version: 4.1.3
+  title: ""
+  date: 2023-06-30T08:51:05.260Z
+- commits:
     - subject: Export ImageNameParts interface
       hash: ad473d4decb373fd8a02fec1d36b57d69c82ef4c
       body: ""

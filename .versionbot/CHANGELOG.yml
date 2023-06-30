@@ -1,4 +1,15 @@
 - commits:
+    - subject: Relax dockerode peer version
+      hash: 4992f2ed073135ad240451df5adf17b47701fad8
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Akis Kesoglou
+  version: 5.0.2
+  title: ""
+  date: 2023-06-30T16:39:29.213Z
+- commits:
     - subject: Fix publish-docs action
       hash: ff04af2c285dbc956a1c30b70eaf3f65e84b469f
       body: ""

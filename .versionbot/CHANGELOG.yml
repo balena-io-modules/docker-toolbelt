@@ -1,4 +1,61 @@
 - commits:
+    - subject: Update to Typescript v5
+      hash: 02bead009d28aadca10d950a1ed8fb4786a8ade8
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Akis Kesoglou
+    - subject: Make Dockerode a peer dep and export plain functions
+      hash: 47c8694b8188268144068692456b3bf95d1d8f82
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Akis Kesoglou
+    - subject: Add method to follow stream progress without buffering to memory
+      hash: 0c226b46e5d820b285f7afa6c81d17370bd55d89
+      body: >
+        DockerModem.followProgress buffers all events internally and hands them
+        all to the onFinish callback. This function is a copy of that without
+        the buffering.
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Akis Kesoglou
+    - subject: Add method to identify balenaEngine
+      hash: c72f7553ffcdf7a3663f3f578ef708d32fefa030
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Akis Kesoglou
+    - subject: Rename `createDeltaAsync` and rewrite it to follow Dockerode’s method
+        style
+      hash: 0618478230bbb7ad4d2a245827989927b294a7d4
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Akis Kesoglou
+    - subject: Remove redundant async-ness from a few methods
+      hash: 822c681a6c9be3e18783b6b58de7220c06c3a3be
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Akis Kesoglou
+    - subject: Drop support for Node versions before v18
+      hash: 7b56a3d5323304f6fcffc9d24fc474bc6a6bc2fd
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Akis Kesoglou
+  version: 5.0.0
+  title: ""
+  date: 2023-06-30T14:06:00.171Z
+- commits:
     - subject: Fix Dockerode type re-export
       hash: f897444d40495e2a87baa8850c078c58ff213677
       body: ""

@@ -1,4 +1,15 @@
 - commits:
+    - subject: Fix publish-docs action
+      hash: ff04af2c285dbc956a1c30b70eaf3f65e84b469f
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Akis Kesoglou
+  version: 5.0.1
+  title: ""
+  date: 2023-06-30T15:04:30.640Z
+- commits:
     - subject: Update to Typescript v5
       hash: 02bead009d28aadca10d950a1ed8fb4786a8ade8
       body: ""

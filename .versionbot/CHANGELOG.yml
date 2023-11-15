@@ -1,4 +1,15 @@
 - commits:
+    - subject: Update dev dependencies
+      hash: 712528dffb1e8c9c714e8ab63026d2e5e71a48a9
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 5.0.3
+  title: ""
+  date: 2023-11-15T14:44:30.614Z
+- commits:
     - subject: Relax dockerode peer version
       hash: 4992f2ed073135ad240451df5adf17b47701fad8
       body: ""

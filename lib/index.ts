@@ -391,18 +391,18 @@ export async function diffPaths(
 	}
 	const dkroot = dockerInfo.DockerRootDir;
 	const imageId = imageInfo.Id;
-	const ids = await getDiffIds(dkroot, driver, imageId).then(function (
-		diffIds,
-	) {
-		if (!usesContentAddressableFormat(dockerVersion)) {
-			return diffIds;
-		}
-		return Promise.all(
-			getAllChainIds(diffIds).map(async (layerId) =>
-				getCacheId(dkroot, driver, layerId),
-			),
-		);
-	});
+	const ids = await getDiffIds(dkroot, driver, imageId).then(
+		function (diffIds) {
+			if (!usesContentAddressableFormat(dockerVersion)) {
+				return diffIds;
+			}
+			return Promise.all(
+				getAllChainIds(diffIds).map(async (layerId) =>
+					getCacheId(dkroot, driver, layerId),
+				),
+			);
+		},
+	);
 	return ids.reverse().map<string>(function (layerId: string) {
 		return driver === 'aufs'
 			? path.join(dkroot, 'aufs/diff', layerId)

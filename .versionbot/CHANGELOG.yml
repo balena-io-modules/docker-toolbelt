@@ -1,4 +1,15 @@
 - commits:
+    - subject: Update to dockerode 4.x
+      hash: 27bd9dc179181c5d6f0b52f9d06753182fbc4dc5
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+  version: 6.0.0
+  title: ""
+  date: 2024-01-03T13:33:56.771Z
+- commits:
     - subject: Update dev dependencies
       hash: 712528dffb1e8c9c714e8ab63026d2e5e71a48a9
       body: ""

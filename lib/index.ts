@@ -1,5 +1,6 @@
 import type Docker from 'dockerode';
 
+import { pipeline } from 'stream';
 import * as crypto from 'crypto';
 import * as es from 'event-stream';
 import * as JSONStream from 'JSONStream';
@@ -652,7 +653,9 @@ export function followProgressUnbuffered(
 	parser.on('error', onStreamError);
 	parser.on('end', onStreamEnd);
 
-	stream.pipe(parser);
+	pipeline(stream, parser, () => {
+		// Do nothing
+	});
 
 	function onStreamEvent(evt: any) {
 		if (!(evt instanceof Object)) {

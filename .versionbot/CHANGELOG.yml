@@ -1,4 +1,15 @@
 - commits:
+    - subject: Update dependencies
+      hash: e3ea7c7ef539c6ffe37c5fae7fa10c89e3fab963
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 6.0.1
+  title: ""
+  date: 2024-02-14T16:46:24.366Z
+- commits:
     - subject: Update to dockerode 4.x
       hash: 27bd9dc179181c5d6f0b52f9d06753182fbc4dc5
       body: ""

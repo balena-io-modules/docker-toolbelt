@@ -1,4 +1,15 @@
 - commits:
+    - subject: Use pipeline for `followProgressUnbuffered` to propagate errors
+      hash: 987f3269100e108e49d960d8e3b99f09a5fa14d9
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 6.0.2
+  title: ""
+  date: 2024-02-14T17:04:20.013Z
+- commits:
     - subject: Update dependencies
       hash: e3ea7c7ef539c6ffe37c5fae7fa10c89e3fab963
       body: ""

@@ -578,7 +578,7 @@ export function getRegistryAndName(image: string): ImageNameParts {
 		digest != null
 			? digest.match(
 					/^[A-Za-z][A-Za-z0-9]*(?:[-_+.][A-Za-z][A-Za-z0-9]*)*:[0-9a-f-A-F]{32,}$/,
-			  )
+				)
 			: undefined;
 	if (!imageName || (digest && !digestMatch)) {
 		throw new Error(

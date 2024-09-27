@@ -1,4 +1,15 @@
 - commits:
+    - subject: "CI: Update checkout settings"
+      hash: f33a331071d80e4408c07740037d154419eb9900
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 6.0.3
+  title: ""
+  date: 2024-09-27T12:15:26.506Z
+- commits:
     - subject: Use pipeline for `followProgressUnbuffered` to propagate errors
       hash: 987f3269100e108e49d960d8e3b99f09a5fa14d9
       body: ""
@@ -194,7 +205,8 @@
 
         It also adds a small GitHub action that will build and publish the docs
 
-        to the `docs` branch after a version bump, so that they can be served from
+        to the `docs` branch after a version bump, so that they can be served
+        from
 
         GitHub pages.
       footer:
@@ -239,7 +251,9 @@
 
         - Resolves native promises instead of Bluebird
 
-        - Switch to non-bluebird disposer pattern, to maintain native promise interface, use "withImageRootDirMounted" instead of "imagerootdirmounted"
+        - Switch to non-bluebird disposer pattern, to maintain native promise
+        interface, use "withImageRootDirMounted" instead of
+        "imagerootdirmounted"
       footer:
         Change-type: major
         change-type: major
@@ -397,13 +411,16 @@
         We add an additional "digest" field to the object returned by
         getRegistryAndName, which is populated  with the digest
 
-        when the image has digest instead of tag. Otherwise behavior us the same as before.
+        when the image has digest instead of tag. Otherwise behavior us the same
+        as before.
 
         compileRegistryAndName now accepts a digest field too.
 
-        normaliseImageName worked with digests but it was just lucky, as getRegistryAndName would match the "@sha256" as part of the repo.
+        normaliseImageName worked with digests but it was just lucky, as
+        getRegistryAndName would match the "@sha256" as part of the repo.
 
-        This change makes the support intentional, and matching the image name in the correct way.
+        This change makes the support intentional, and matching the image name
+        in the correct way.
       footers:
         change-type: minor
         signed-off-by: Pablo Carranza Velez <pablo@resin.io>
@@ -434,9 +451,13 @@
         contains the name of its alias under `/var/lib/docker/overlay2/l`
         directory, which makes for a very short path name.
 
-        For example the diff directory `/var/lib/docker/overlay2/223c2864175491657d238e2664251df13b63adb8d050924fd1bfcdb278b866f7/diff` now is referenced as `l/NFYKDW6APBCCUCTOUSYDH4DXAT`, which is much shorter.
+        For example the diff directory
+        `/var/lib/docker/overlay2/223c2864175491657d238e2664251df13b63adb8d050924fd1bfcdb278b866f7/diff`
+        now is referenced as `l/NFYKDW6APBCCUCTOUSYDH4DXAT`, which is much
+        shorter.
 
-        See: https://docs.docker.com/engine/userguide/storagedriver/overlayfs-driver/#image-and-container-layers-on-disk
+        See:
+        https://docs.docker.com/engine/userguide/storagedriver/overlayfs-driver/#image-and-container-layers-on-disk
       footers:
         change-type: patch
       hash: 84da0ae19824267cbbea58e47dfa48c4193c97db
@@ -474,15 +495,18 @@
 
         It also mutated images and containers by promisifying their prototype.
 
-        Now we extend that class and use dockerode's promise support instead of promisifying - but we pass bluebird
+        Now we extend that class and use dockerode's promise support instead of
+        promisifying - but we pass bluebird
 
         as the Promise for dockerode to use.
 
-        We also add mocha (with mochainon) and some basic tests that only cover testing that this returns a valid promise-aware
+        We also add mocha (with mochainon) and some basic tests that only cover
+        testing that this returns a valid promise-aware
 
         docker object.
 
-        No tests for the docker-toolbelt specific functions were added yet (should be added soon, hopefully...).
+        No tests for the docker-toolbelt specific functions were added yet
+        (should be added soon, hopefully...).
       footers:
         change-type: major
         signed-off-by: Pablo Carranza Velez <pablo@resin.io>
@@ -547,7 +571,9 @@
         This commit adds support for inspecting the “diff” layer and mounting an
         fs created with overlay2.
 
-        This deprecates `aufsDiffPaths`, which now also applies to overlay2, introducing a new method `diffPaths` that can work with both aufs and overlay2.
+        This deprecates `aufsDiffPaths`, which now also applies to overlay2,
+        introducing a new method `diffPaths` that can work with both aufs and
+        overlay2.
       footers:
         change-type: minor
       hash: f7a8b0890d5d41f83fcd4cddfca73c792373464f
@@ -571,9 +597,11 @@
         In docker 17.03, docker moved to a not-quite-semver-compatible
         versioning
 
-        scheme. We add a `true` third argument to the semver comparison to make it
+        scheme. We add a `true` third argument to the semver comparison to make
+        it
 
-        more forgiving and properly compare 17.03.1-ce and the like as if they were semver.
+        more forgiving and properly compare 17.03.1-ce and the like as if they
+        were semver.
       footers:
         change-type: patch
         signed-off-by: Pablo Carranza Velez <pablo@resin.io>
@@ -597,17 +625,23 @@
         mount limits the mount options to page size (usually 4096 bytes), so we
         do what docker does
 
-        to mount when layers don't fit in that: we mount with as much as we can fit and then
+        to mount when layers don't fit in that: we mount with as much as we can
+        fit and then
 
-        remount appending each remaining layer. We stick to 4096 instead of actually finding the page size
+        remount appending each remaining layer. We stick to 4096 instead of
+        actually finding the page size
 
-        cause it's assured to work (4096 is the minimum in the arches we support), reduces complexity and
+        cause it's assured to work (4096 is the minimum in the arches we
+        support), reduces complexity and
 
-        shouldn't generate much overhead (we don't care about a few extra remounts).
+        shouldn't generate much overhead (we don't care about a few extra
+        remounts).
 
-        Based on https://github.com/docker/docker/blob/b937aa8e6968d805527d163e6f477d496ceb88d7/daemon/graphdriver/aufs/aufs.go#L595
+        Based on
+        https://github.com/docker/docker/blob/b937aa8e6968d805527d163e6f477d496ceb88d7/daemon/graphdriver/aufs/aufs.go#L595
 
-        We also introduce 8 random characters to the temporary path we use for the aufs mount, so that
+        We also introduce 8 random characters to the temporary path we use for
+        the aufs mount, so that
 
         several calls to this function can work independently.
       footers:
@@ -648,13 +682,17 @@
         imageRootDir now works for aufs, but shows only the last diff in the
         image.
 
-        To have fully compatible behavior, imageRootDirMounted should be used, so that
+        To have fully compatible behavior, imageRootDirMounted should be used,
+        so that
 
-        the full image rootfs gets mounted at the returned path. For other drivers,
+        the full image rootfs gets mounted at the returned path. For other
+        drivers,
 
-        behavior will be the same as imageRootDir (only it has to be used with Promise.using).
+        behavior will be the same as imageRootDir (only it has to be used with
+        Promise.using).
 
-        aufsDiffPaths allows getting the paths for each layer diff in an aufs-stored image.
+        aufsDiffPaths allows getting the paths for each layer diff in an
+        aufs-stored image.
       hash: 0ac1fe445e176c2a5fd2fcbb4c831c3f3966df5e
       subject: Implement imageRootDirMounted and aufsDiffPaths
     - author: Pablo Carranza Velez

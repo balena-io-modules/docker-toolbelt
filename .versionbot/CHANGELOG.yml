@@ -1,4 +1,16 @@
 - commits:
+    - subject: Pin dependencies
+      hash: 3da6898c9279eb301a5966838f1de20b3a3f95c3
+      body: |
+        Update actions/checkout
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.0.4
+  title: ""
+  date: 2025-03-19T16:00:12.876Z
+- commits:
     - subject: "CI: Update checkout settings"
       hash: f33a331071d80e4408c07740037d154419eb9900
       body: ""
@@ -444,20 +456,10 @@
       hash: eab0f575bcc2d074d74049090e351e19653b716a
       subject: Remove unused variable
     - author: Akis Kesoglou
-      body: >-
-        We did try to handle cases where the opts passed to mount exceeded page
-        size by passing relative paths to mount. This apparently doesn’t always
-        work. With this commit, we now read each layer’s `link` file that
-        contains the name of its alias under `/var/lib/docker/overlay2/l`
-        directory, which makes for a very short path name.
-
-        For example the diff directory
-        `/var/lib/docker/overlay2/223c2864175491657d238e2664251df13b63adb8d050924fd1bfcdb278b866f7/diff`
-        now is referenced as `l/NFYKDW6APBCCUCTOUSYDH4DXAT`, which is much
-        shorter.
-
-        See:
-        https://docs.docker.com/engine/userguide/storagedriver/overlayfs-driver/#image-and-container-layers-on-disk
+      body: |-
+        We did try to handle cases where the opts passed to mount exceeded page size by passing relative paths to mount. This apparently doesn’t always work. With this commit, we now read each layer’s `link` file that contains the name of its alias under `/var/lib/docker/overlay2/l` directory, which makes for a very short path name.
+        For example the diff directory `/var/lib/docker/overlay2/223c2864175491657d238e2664251df13b63adb8d050924fd1bfcdb278b866f7/diff` now is referenced as `l/NFYKDW6APBCCUCTOUSYDH4DXAT`, which is much shorter.
+        See: https://docs.docker.com/engine/userguide/storagedriver/overlayfs-driver/#image-and-container-layers-on-disk
       footers:
         change-type: patch
       hash: 84da0ae19824267cbbea58e47dfa48c4193c97db
@@ -621,28 +623,14 @@
       hash: 8136760062888d6b86fae51d1e0b543fb685fd6d
       subject: Add versionist with the default configuration
     - author: Pablo Carranza Velez
-      body: >-
-        mount limits the mount options to page size (usually 4096 bytes), so we
-        do what docker does
-
-        to mount when layers don't fit in that: we mount with as much as we can
-        fit and then
-
-        remount appending each remaining layer. We stick to 4096 instead of
-        actually finding the page size
-
-        cause it's assured to work (4096 is the minimum in the arches we
-        support), reduces complexity and
-
-        shouldn't generate much overhead (we don't care about a few extra
-        remounts).
-
-        Based on
-        https://github.com/docker/docker/blob/b937aa8e6968d805527d163e6f477d496ceb88d7/daemon/graphdriver/aufs/aufs.go#L595
-
-        We also introduce 8 random characters to the temporary path we use for
-        the aufs mount, so that
-
+      body: |-
+        mount limits the mount options to page size (usually 4096 bytes), so we do what docker does
+        to mount when layers don't fit in that: we mount with as much as we can fit and then
+        remount appending each remaining layer. We stick to 4096 instead of actually finding the page size
+        cause it's assured to work (4096 is the minimum in the arches we support), reduces complexity and
+        shouldn't generate much overhead (we don't care about a few extra remounts).
+        Based on https://github.com/docker/docker/blob/b937aa8e6968d805527d163e6f477d496ceb88d7/daemon/graphdriver/aufs/aufs.go#L595
+        We also introduce 8 random characters to the temporary path we use for the aufs mount, so that
         several calls to this function can work independently.
       footers:
         change-type: patch

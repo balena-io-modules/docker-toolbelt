@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update actions/setup-node action to v4
+      hash: 6f803301aecffc277b55febc8bce6f4c847b3f9f
+      body: |
+        Update actions/setup-node from 3 to 4
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.0.5
+  title: ""
+  date: 2025-03-25T17:22:00.426Z
+- commits:
     - subject: Pin dependencies
       hash: 3da6898c9279eb301a5966838f1de20b3a3f95c3
       body: |

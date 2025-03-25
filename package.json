@@ -28,7 +28,7 @@
   },
   "homepage": "https://github.com/balena-io-modules/docker-toolbelt#readme",
   "dependencies": {
-    "balena-semver": "^2.3.5",
+    "balena-semver": "^3.0.0",
     "event-stream": "^4.0.1",
     "JSONStream": "^1.3.5",
     "randomstring": "^1.3.0",

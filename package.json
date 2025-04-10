@@ -46,7 +46,7 @@
     "mocha": "^11.0.0",
     "rimraf": "^6.0.0",
     "ts-node": "^10.9.2",
-    "typedoc": "^0.25.8",
+    "typedoc": "^0.28.0",
     "typescript": "^5.3.3"
   },
   "versionist": {

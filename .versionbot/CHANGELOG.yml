@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update peaceiris/actions-gh-pages action to v4
+      hash: 6538fc6787b038ed79a80512b27f2655f21500cb
+      body: |
+        Update peaceiris/actions-gh-pages from 3 to 4
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.0.9
+  title: ""
+  date: 2025-04-10T15:25:13.216Z
+- commits:
     - subject: Update dependency rimraf to v6
       hash: 77916ac11bd7d65ea211404ae0d9336786df78ff
       body: |

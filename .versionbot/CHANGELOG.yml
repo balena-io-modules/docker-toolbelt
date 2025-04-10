@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update dependency rimraf to v6
+      hash: 77916ac11bd7d65ea211404ae0d9336786df78ff
+      body: |
+        Update rimraf from 5.0.10 to 6.0.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.0.8
+  title: ""
+  date: 2025-04-10T13:49:29.409Z
+- commits:
     - subject: Update dependency balena-semver to v3
       hash: f0d15dfe2745046a445e1e9b2802dcbc2557de96
       body: |

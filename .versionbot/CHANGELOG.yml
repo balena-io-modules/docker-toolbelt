@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update actions/setup-node digest to 49933ea
+      hash: 8f194b668a020fef896c13ec2378fcc54e78dddf
+      body: |
+        Update actions/setup-node
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 6.0.11
+  title: ""
+  date: 2025-04-16T15:58:16.885Z
+- commits:
     - subject: Update dependency typedoc to ^0.28.0
       hash: 35c794774cc29e5c69a487a1112a1c31debad64a
       body: |

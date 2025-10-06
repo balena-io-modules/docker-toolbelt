@@ -1,8 +1,7 @@
 import type Docker from 'dockerode';
 
-import { pipeline } from 'stream';
+import Stream, { pipeline } from 'stream';
 import * as crypto from 'crypto';
-import * as es from 'event-stream';
 import * as JSONStream from 'JSONStream';
 import * as path from 'path';
 import * as randomstring from 'randomstring';
@@ -30,24 +29,11 @@ export interface ImageNameParts {
 	digest: string;
 }
 
-function promiseFromCallback<T>(
-	fn: (callback: (err: any, data: T) => any) => any,
-): Promise<T> {
-	return new Promise((resolve, reject) => {
-		fn((err, data) => {
-			if (err) {
-				reject(err as Error);
-				return;
-			}
-			resolve(data);
-		});
-	});
-}
-
-async function waitStream<T>(stream: NodeJS.ReadableStream) {
-	return await promiseFromCallback<T>((callback) =>
-		stream.pipe(es.wait(callback)),
-	);
+async function waitStream(stream: NodeJS.ReadableStream) {
+	const chunks: Buffer[] = [];
+	stream.on('data', (chunk) => chunks.push(Buffer.from(chunk)));
+	await Stream.promises.finished(stream);
+	return Buffer.concat(chunks);
 }
 
 function sha256sum(data: string): string {
@@ -441,7 +427,7 @@ export async function createEmptyImage(
 	layer.entry({ name: 'seed' }, String(Date.now() + Math.random()));
 	layer.finalize();
 
-	const buf = await waitStream<string>(layer);
+	const buf = (await waitStream(layer)).toString();
 	const now = new Date().toISOString();
 
 	const config = {

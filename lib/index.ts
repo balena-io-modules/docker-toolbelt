@@ -30,13 +30,14 @@ export interface ImageNameParts {
 	digest: string;
 }
 
-async function promiseFromCallback<T>(
+function promiseFromCallback<T>(
 	fn: (callback: (err: any, data: T) => any) => any,
 ): Promise<T> {
 	return new Promise((resolve, reject) => {
 		fn((err, data) => {
 			if (err) {
-				return reject(err);
+				reject(err as Error);
+				return;
 			}
 			resolve(data);
 		});
@@ -160,7 +161,7 @@ async function withOverlay2Mount<T>(
 	lowers: string,
 	diffDir: string,
 	workDir: string,
-	fn: (mountDir: string) => T,
+	fn: (mountDir: string) => Promise<T> | T,
 ): Promise<T> {
 	// If no lower, just return
 	if (!lowers) {
@@ -238,7 +239,7 @@ async function withOverlay2Mount<T>(
 async function withAufsMount<T>(
 	target: string,
 	layerDiffPaths: string[], // We try to create the target directory.
-	fn: (target: string) => T,
+	fn: (target: string) => Promise<T> | T,
 ): Promise<T> {
 	// If it exists, it's *probably* from a previous run of this same function,
 	// and the mount will fail if the directory is not empty or something's already mounted there.
@@ -339,7 +340,7 @@ export async function imageRootDir(
 export async function withImageRootDirMounted<T>(
 	client: Docker,
 	image: string,
-	fn: (target: string) => T,
+	fn: (target: string) => Promise<T> | T,
 ): Promise<T> {
 	const [dockerInfo, imageInfo] = await Promise.all([
 		client.info(),
@@ -515,12 +516,12 @@ export function createDelta(
 	client: Docker,
 	opts: CreateDeltaOptions,
 	callback: Callback<NodeJS.ReadableStream>,
-): void;
+): undefined;
 export function createDelta(
 	client: Docker,
 	opts: CreateDeltaOptions,
 	callback?: Callback<NodeJS.ReadableStream>,
-): void | Promise<NodeJS.ReadableStream> {
+): undefined | Promise<NodeJS.ReadableStream> {
 	const optsf = {
 		path: '/images/delta?',
 		method: 'POST',
@@ -537,7 +538,8 @@ export function createDelta(
 		return new modem.Promise(function (resolve, reject) {
 			modem.dial(optsf, function (err, data) {
 				if (err) {
-					return reject(err);
+					reject(err);
+					return;
 				}
 				resolve(data as NodeJS.ReadableStream);
 			});
@@ -662,7 +664,8 @@ export function followProgressUnbuffered(
 			evt = {};
 		}
 		if (evt.error) {
-			return onStreamError(evt.error);
+			onStreamError(evt.error);
+			return;
 		}
 		if (onProgress) {
 			onProgress(evt);

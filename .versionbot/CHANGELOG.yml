@@ -1,4 +1,15 @@
 - commits:
+    - subject: Update dependencies
+      hash: 13b9d72f6d2b519a11f133094a3735c537c1d0b6
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 6.0.12
+  title: ""
+  date: 2025-10-06T16:52:47.374Z
+- commits:
     - subject: Update actions/setup-node digest to 49933ea
       hash: 8f194b668a020fef896c13ec2378fcc54e78dddf
       body: |

@@ -1,4 +1,15 @@
 - commits:
+    - subject: Remove `event-stream` in favor of built-in alternatives
+      hash: 4019e32bff14c71675d1777c3fff69b31d37f7b8
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 6.0.14
+  title: ""
+  date: 2025-10-07T11:51:49.360Z
+- commits:
     - subject: Update actions/checkout digest to 08eba0b
       hash: b9dadfd22fa93116029cf202f26ae7c01ebcb2d6
       body: |

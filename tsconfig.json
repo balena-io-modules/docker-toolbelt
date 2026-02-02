@@ -1,13 +1,13 @@
 {
 	"compilerOptions": {
-		"module": "commonjs",
+		"module": "node20",
 		"outDir": "build",
 		"noUnusedParameters": true,
 		"noUnusedLocals": true,
 		"removeComments": true,
 		"sourceMap": true,
 		"strict": true,
-		"target": "es2021",
+		"target": "es2024",
 		"declaration": true,
 		"skipLibCheck": true,
 		"esModuleInterop": true
@@ -16,8 +16,5 @@
 		"lib/**/*.ts",
 		"tests/**/*.ts",
 		"typings/**/*.d.ts",
-	],
-	"ts-node": {
-		"files": true
-	}
+	]
 }

@@ -1,12 +1,11 @@
 import type Docker from 'dockerode';
 
 import Stream, { pipeline } from 'stream';
-import * as crypto from 'crypto';
-import * as JSONStream from 'JSONStream';
-import * as path from 'path';
-import * as randomstring from 'randomstring';
-import * as semver from 'balena-semver';
-import * as tar from 'tar-stream';
+import crypto from 'crypto';
+import JSONStream from 'JSONStream';
+import path from 'path';
+import randomstring from 'randomstring';
+import tar from 'tar-stream';
 import { exec } from 'child_process';
 import { promises as fs } from 'fs';
 import { promisify } from 'util';
@@ -113,14 +112,6 @@ async function getCacheId(
 
 function getRandomFileName(imageId: string): string {
 	return `tmp-${imageId.split(':')[1]}-${randomstring.generate(8)}`;
-}
-
-// Check if the docker version is a release after 1.10.0, or if its one of the fun
-// new non-semver versions, which we incidentally know all appeared after 1.10.0
-// Docker version 1.10.0 changes the way images are stored on disk and referenced
-// If the docker version supports the new "content-addressable" layer format, this function returns true
-function usesContentAddressableFormat(version: string): boolean {
-	return !(semver.valid(version) && semver.lt(version, '1.10.0'));
 }
 
 function pathPrefixRemover(prefix: string): (value: string) => string {
@@ -285,17 +276,14 @@ export async function imageRootDir(
 	client: Docker,
 	image: string,
 ): Promise<string> {
-	const [dockerInfo, { Version: dockerVersion }, imageInfo] = await Promise.all(
-		[client.info(), client.version(), client.getImage(image).inspect()],
-	);
+	const [dockerInfo, imageInfo] = await Promise.all([
+		client.info(),
+		client.getImage(image).inspect(),
+	]);
 
 	const dkroot = dockerInfo.DockerRootDir;
 
 	const imageId = imageInfo.Id;
-
-	if (!usesContentAddressableFormat(dockerVersion)) {
-		return imageId;
-	}
 
 	const diffIds = await getDiffIds(dkroot, dockerInfo.Driver, imageId);
 	const layerId = createChainId(diffIds);
@@ -369,9 +357,10 @@ export async function diffPaths(
 	client: Docker,
 	image: string,
 ): Promise<string[]> {
-	const [dockerInfo, { Version: dockerVersion }, imageInfo] = await Promise.all(
-		[client.info(), client.version(), client.getImage(image).inspect()],
-	);
+	const [dockerInfo, imageInfo] = await Promise.all([
+		client.info(),
+		client.getImage(image).inspect(),
+	]);
 
 	const driver = dockerInfo.Driver;
 	if (!(driver === 'aufs' || driver === 'overlay2')) {
@@ -381,9 +370,6 @@ export async function diffPaths(
 	const imageId = imageInfo.Id;
 	const ids = await getDiffIds(dkroot, driver, imageId).then(
 		function (diffIds) {
-			if (!usesContentAddressableFormat(dockerVersion)) {
-				return diffIds;
-			}
 			return Promise.all(
 				getAllChainIds(diffIds).map(async (layerId) =>
 					getCacheId(dkroot, driver, layerId),

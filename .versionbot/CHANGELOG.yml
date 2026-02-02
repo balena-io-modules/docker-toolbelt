@@ -1,4 +1,45 @@
 - commits:
+    - subject: Update @types/dockerode to 4.x
+      hash: 5c5cbbdd68b236e0da5c0ed9229c532eb52c7bd6
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+    - subject: Switch to ESM
+      hash: 67961cf8f843088fd5d76d90f392e6077ab001cf
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+    - subject: Update tsconfig target to es2024
+      hash: 82d9beb70a699a9149ea493d29b947667e58e2fc
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+    - subject: Update minimum supported nodejs version to ^22.22.0 || >=24.13.0
+      hash: e4c62117fed82d4e413809feb72d682cd4c41670
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+    - subject: Drop support for docker < 1.10 (released Feb 2016)
+      hash: 634fef0fb1f0e47ab46581720b6a2f9f2fb16280
+      body: |
+        This allows us to drop the balena-semver dependency and avoid calls to
+        `docker.version()`
+      footer:
+        Change-type: major
+        change-type: major
+      author: Pagan Gazzard
+  version: 7.0.0
+  title: ""
+  date: 2026-02-02T19:11:04.201Z
+- commits:
     - subject: Remove `event-stream` in favor of built-in alternatives
       hash: 4019e32bff14c71675d1777c3fff69b31d37f7b8
       body: ""

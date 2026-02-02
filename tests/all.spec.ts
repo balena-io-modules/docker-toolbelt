@@ -1,4 +1,4 @@
-import * as dt from '../lib';
+import * as dt from '../build/index.js';
 import { expect } from 'chai';
 
 describe('DockerToolbelt', function () {

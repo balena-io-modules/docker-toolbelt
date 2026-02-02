@@ -1,11 +1,11 @@
 import type Docker from 'dockerode';
 
 import Stream, { pipeline } from 'stream';
-import * as crypto from 'crypto';
-import * as JSONStream from 'JSONStream';
-import * as path from 'path';
-import * as randomstring from 'randomstring';
-import * as tar from 'tar-stream';
+import crypto from 'crypto';
+import JSONStream from 'JSONStream';
+import path from 'path';
+import randomstring from 'randomstring';
+import tar from 'tar-stream';
 import { exec } from 'child_process';
 import { promises as fs } from 'fs';
 import { promisify } from 'util';

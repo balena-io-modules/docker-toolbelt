@@ -1,6 +1,6 @@
 {
 	"compilerOptions": {
-		"module": "commonjs",
+		"module": "node20",
 		"outDir": "build",
 		"noUnusedParameters": true,
 		"noUnusedLocals": true,
@@ -16,8 +16,5 @@
 		"lib/**/*.ts",
 		"tests/**/*.ts",
 		"typings/**/*.d.ts",
-	],
-	"ts-node": {
-		"files": true
-	}
+	]
 }

@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update actions/setup-node action to v5
+      hash: 8d574f82e9409c42464b3f155a682c3ab0103f3c
+      body: |
+        Update actions/setup-node from 4 to 5
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 7.0.4
+  title: ""
+  date: 2026-02-04T13:30:03.758Z
+- commits:
     - subject: Update actions/checkout action to v6
       hash: ff2e078824c55446d2b3ce8e942242350c32d3c7
       body: |

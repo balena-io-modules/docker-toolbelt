@@ -1,4 +1,15 @@
 - commits:
+    - subject: Add explicit dependency on the minimum supported @types/node version
+      hash: 5f73aa77bdd08c470000192d911191b13772535f
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 7.0.1
+  title: ""
+  date: 2026-02-04T11:47:00.597Z
+- commits:
     - subject: Update @types/dockerode to 4.x
       hash: 5c5cbbdd68b236e0da5c0ed9229c532eb52c7bd6
       body: ""

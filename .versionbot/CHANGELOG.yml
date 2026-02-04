@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update actions/checkout digest to 34e1148
+      hash: c6de49f007b75063dde8b8ae52b55abee6882d7b
+      body: |
+        Update actions/checkout
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 7.0.2
+  title: ""
+  date: 2026-02-04T11:59:30.668Z
+- commits:
     - subject: Add explicit dependency on the minimum supported @types/node version
       hash: 5f73aa77bdd08c470000192d911191b13772535f
       body: ""

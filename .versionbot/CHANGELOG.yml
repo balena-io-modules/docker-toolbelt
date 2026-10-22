@@ -1,4 +1,15 @@
 - commits:
+    - subject: Update tar-stream to 3.2.2
+      hash: c01f9ad6f8c8b1ab7b5791aa393a89b4254c9275
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 7.0.7
+  title: ""
+  date: 2026-10-22T23:37:37.209Z
+- commits:
     - subject: "Add id-token: write permission for NPM OIDC publishing"
       hash: 9a260c01bbd1c0c54b5db7b329357ee3c9afbd5f
       body: ""

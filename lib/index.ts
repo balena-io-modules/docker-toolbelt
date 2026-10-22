@@ -1,6 +1,6 @@
 import type Docker from 'dockerode';
 
-import Stream, { pipeline } from 'stream';
+import Stream, { pipeline, type Readable } from 'stream';
 import crypto from 'crypto';
 import JSONStream from 'JSONStream';
 import path from 'path';
@@ -413,7 +413,7 @@ export async function createEmptyImage(
 	layer.entry({ name: 'seed' }, String(Date.now() + Math.random()));
 	layer.finalize();
 
-	const buf = (await waitStream(layer)).toString();
+	const buf = (await waitStream(layer as unknown as Readable)).toString();
 	const now = new Date().toISOString();
 
 	const config = {
@@ -442,7 +442,7 @@ export async function createEmptyImage(
 
 	image.finalize();
 
-	const stream = await client.loadImage(image);
+	const stream = await client.loadImage(image as unknown as Readable);
 	await waitStream(stream);
 	return imageId;
 }

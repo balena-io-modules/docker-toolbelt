@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update actions/checkout action to v7
+      hash: 701df8170fa992a790fc1f112961f432b69e2ac5
+      body: |
+        Update actions/checkout from 6.1.0 to 7.0.1
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 7.1.1
+  title: ""
+  date: 2026-10-23T01:26:42.406Z
+- commits:
     - subject: Mark dockerode 5.x as a supported peer dependency
       hash: 6583ca58199cc630da2fd1dce8d31624e0399f32
       body: ""

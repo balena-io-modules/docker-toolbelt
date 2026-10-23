@@ -51,6 +51,6 @@
     "publishedAt": "2026-10-23T00:02:20.370Z"
   },
   "peerDependencies": {
-    "dockerode": "^4.0.2"
+    "dockerode": "^4.0.2 || ^5.0.0"
   }
 }

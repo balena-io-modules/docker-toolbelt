@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update actions/setup-node action to v7
+      hash: 378965ea2960378a525fc300f459839fccf5d769
+      body: |
+        Update actions/setup-node from 6.5.0 to 7.1.0
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 7.1.2
+  title: ""
+  date: 2026-10-23T02:08:15.802Z
+- commits:
     - subject: Update actions/checkout action to v7
       hash: 701df8170fa992a790fc1f112961f432b69e2ac5
       body: |

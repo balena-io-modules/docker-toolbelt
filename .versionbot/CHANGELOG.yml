@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update dependency mocha to v12
+      hash: 05f465427329f04b61aa9a703cbf38f22cacc164
+      body: |
+        Update mocha from 11.8.0 to 12.0.3
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 7.1.5
+  title: ""
+  date: 2026-10-23T05:02:34.818Z
+- commits:
     - subject: Pin dependencies
       hash: 54b7ae282b9780adb463a6f75dad8910c7567b97
       body: |

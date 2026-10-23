@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update GitHub Actions
+      hash: fc9c7ad279ae8469f7d7953526b08fb6fd4b4498
+      body: |
+        Update actions/checkout
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 7.0.8
+  title: ""
+  date: 2026-10-23T00:02:20.307Z
+- commits:
     - subject: Update tar-stream to 3.2.2
       hash: c01f9ad6f8c8b1ab7b5791aa393a89b4254c9275
       body: ""

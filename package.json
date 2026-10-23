@@ -1,6 +1,6 @@
 {
   "name": "docker-toolbelt",
-  "version": "7.0.7",
+  "version": "7.0.8",
   "description": "Some tools for docker",
   "type": "module",
   "main": "build/index.js",
@@ -48,7 +48,7 @@
     "typescript": "^5.9.3"
   },
   "versionist": {
-    "publishedAt": "2026-10-22T23:37:37.257Z"
+    "publishedAt": "2026-10-23T00:02:20.370Z"
   },
   "peerDependencies": {
     "dockerode": "^4.0.2"

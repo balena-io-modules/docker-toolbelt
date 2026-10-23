@@ -1,4 +1,16 @@
 - commits:
+    - subject: Pin dependencies
+      hash: 54b7ae282b9780adb463a6f75dad8910c7567b97
+      body: |
+        Update @types/chai
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 7.1.4
+  title: ""
+  date: 2026-10-23T04:03:23.193Z
+- commits:
     - subject: Update dependency flowzonify to v0.4.22
       hash: 29c8c4667fb64e714570ae9d8a8b20fde2577633
       body: |

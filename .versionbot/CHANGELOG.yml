@@ -1,4 +1,15 @@
 - commits:
+    - subject: Mark dockerode 5.x as a supported peer dependency
+      hash: 6583ca58199cc630da2fd1dce8d31624e0399f32
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+      author: Pagan Gazzard
+  version: 7.1.0
+  title: ""
+  date: 2026-10-23T00:07:56.949Z
+- commits:
     - subject: Update GitHub Actions
       hash: fc9c7ad279ae8469f7d7953526b08fb6fd4b4498
       body: |

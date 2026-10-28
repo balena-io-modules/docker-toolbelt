@@ -1,5 +1,7 @@
 import * as dt from '../build/index.js';
 import { expect } from 'chai';
+import { PassThrough } from 'node:stream';
+import { setTimeout } from 'node:timers/promises';
 
 describe('DockerToolbelt', function () {
 	it('splits an image name into its components with getRegistryAndName', function () {
@@ -148,5 +150,59 @@ describe('DockerToolbelt', function () {
 			} as any);
 			expect(fullName).to.equal(expected);
 		});
+	});
+});
+
+describe('followProgressUnbuffered', function () {
+	// Collects every onFinished/onProgress call made while `drive` feeds the stream
+	async function follow(drive: (stream: PassThrough) => void) {
+		const stream = new PassThrough();
+		const finished: Array<Error | null> = [];
+		const events: unknown[] = [];
+		dt.followProgressUnbuffered(
+			stream,
+			(err) => finished.push(err),
+			(event) => events.push(event),
+		);
+		drive(stream);
+		await setTimeout(50);
+		return { finished, events };
+	}
+
+	it('calls onFinished(null) once the stream ends', async function () {
+		const { finished, events } = await follow((stream) => {
+			stream.end('{"status":"a"}\n{"status":"b"}\n');
+		});
+		expect(finished).to.deep.equal([null]);
+		expect(events).to.deep.equal([{ status: 'a' }, { status: 'b' }]);
+	});
+
+	it('calls onFinished with the error when the source stream errors', async function () {
+		const { finished, events } = await follow((stream) => {
+			stream.write('{"status":"a"}\n');
+			stream.destroy(new Error('socket hang up'));
+		});
+		expect(events).to.deep.equal([{ status: 'a' }]);
+		expect(finished).to.have.lengthOf(1);
+		expect(finished[0])
+			.to.be.an('error')
+			.with.property('message', 'socket hang up');
+	});
+
+	it('calls onFinished with an error when the source stream closes before ending', async function () {
+		const { finished } = await follow((stream) => {
+			stream.write('{"status":"a"}\n');
+			stream.destroy();
+		});
+		expect(finished).to.have.lengthOf(1);
+		expect(finished[0]).to.be.an('error');
+	});
+
+	it('calls onFinished only once for invalid JSON', async function () {
+		const { finished } = await follow((stream) => {
+			stream.end('{"status":"a"}\n{not json\n');
+		});
+		expect(finished).to.have.lengthOf(1);
+		expect(finished[0]).to.be.an('error');
 	});
 });

@@ -622,13 +622,19 @@ export function followProgressUnbuffered(
 	onProgress?: (event: any) => void,
 ) {
 	const parser = JSONStream.parse(undefined);
+	let finished = false;
 
 	parser.on('data', onStreamEvent);
 	parser.on('error', onStreamError);
 	parser.on('end', onStreamEnd);
 
-	pipeline(stream, parser, () => {
-		// Do nothing
+	// When the source stream errors or closes early the parser is only destroyed,
+	// it emits neither 'error' nor 'end', so the pipeline callback is the only
+	// place that sees those failures
+	pipeline(stream, parser, (err) => {
+		if (err != null) {
+			onStreamError(err);
+		}
 	});
 
 	function onStreamEvent(evt: any) {
@@ -645,6 +651,10 @@ export function followProgressUnbuffered(
 	}
 
 	function onStreamError(err: Error) {
+		if (finished) {
+			return;
+		}
+		finished = true;
 		parser.removeListener('data', onStreamEvent);
 		parser.removeListener('error', onStreamError);
 		parser.removeListener('end', onStreamEnd);
@@ -652,6 +662,10 @@ export function followProgressUnbuffered(
 	}
 
 	function onStreamEnd() {
+		if (finished) {
+			return;
+		}
+		finished = true;
 		onFinished(null);
 	}
 }

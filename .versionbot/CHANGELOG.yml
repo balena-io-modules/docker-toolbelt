@@ -1,4 +1,29 @@
 - commits:
+    - subject: "followProgressUnbuffered: Call onFinished when the source stream fails"
+      hash: 5a6bc2a2c486bd61b39c2373296c7cd7073e03a7
+      body: >
+        When the source stream errors or closes before ending, `pipeline` only
+
+        destroys the JSONStream parser, which emits neither 'error' nor 'end',
+        and
+
+        the pipeline callback ignored the error. So `onFinished` was never
+        called
+
+        and callers waiting on it (eg a pull/push whose docker connection drops)
+
+        would hang forever. The pipeline error is now passed to `onFinished`,
+        which
+
+        is also guaranteed to be called at most once.
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 7.1.6
+  title: ""
+  date: 2026-10-28T23:23:55.925Z
+- commits:
     - subject: Update dependency mocha to v12
       hash: 05f465427329f04b61aa9a703cbf38f22cacc164
       body: |

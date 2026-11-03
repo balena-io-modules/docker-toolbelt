@@ -1,4 +1,15 @@
 - commits:
+    - subject: Update typescript to 6.0.3
+      hash: 77ac8a2e6fefea1190776fcb14b878bf5c971dc6
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 7.1.9
+  title: ""
+  date: 2026-11-03T23:49:18.006Z
+- commits:
     - subject: Update @balena/lint to 11.x
       hash: a1504368a301b9c9abfdf5811f53c9588677e308
       body: ""

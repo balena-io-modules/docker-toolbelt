@@ -155,7 +155,7 @@ async function withOverlay2Mount<T>(
 
 	const options = `lowerdir=${lowers},upperdir=${diffDir},workdir=${workDir}`;
 
-	let parts: Array<string | undefined> = [];
+	let parts: Array<string | undefined>;
 	if (options.length < MIN_PAGE_SIZE) {
 		parts = [undefined, lowers, diffDir, workDir];
 	} else {

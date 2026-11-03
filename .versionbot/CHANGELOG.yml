@@ -1,4 +1,15 @@
 - commits:
+    - subject: Update @balena/lint to 11.x
+      hash: a1504368a301b9c9abfdf5811f53c9588677e308
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: Pagan Gazzard
+  version: 7.1.8
+  title: ""
+  date: 2026-11-03T15:04:10.789Z
+- commits:
     - subject: Update dependency node to v22
       hash: 1931b25102edfe49f7e7587c5776c21f5493129e
       body: |

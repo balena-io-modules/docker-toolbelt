@@ -1,3 +1,4 @@
+import 'mocha';
 import * as dt from '../build/index.js';
 import { expect } from 'chai';
 import { PassThrough } from 'node:stream';

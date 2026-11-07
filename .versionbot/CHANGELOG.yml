@@ -1,4 +1,16 @@
 - commits:
+    - subject: Update dependency rimraf to v6.1.4
+      hash: 2679fde630b47fa938a014e6b54046d263df6031
+      body: |
+        Update rimraf from 6.1.3 to 6.1.4
+      footer:
+        Change-type: patch
+        change-type: patch
+      author: balena-renovate[bot]
+  version: 7.1.10
+  title: ""
+  date: 2026-11-07T01:04:29.126Z
+- commits:
     - subject: Update typescript to 6.0.3
       hash: 77ac8a2e6fefea1190776fcb14b878bf5c971dc6
       body: ""
